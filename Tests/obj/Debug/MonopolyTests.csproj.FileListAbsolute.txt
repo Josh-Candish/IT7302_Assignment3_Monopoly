@@ -7,3 +7,12 @@ C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\bin\
 C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\obj\Debug\MonopolyTests.csprojResolveAssemblyReference.cache
 C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\obj\Debug\Tests.dll
 C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\obj\Debug\Tests.pdb
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\bin\Debug\Tests.dll
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\bin\Debug\Tests.pdb
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\bin\Debug\IT7302_MonopolyProject_21102588_JoshuaCandish.exe
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\bin\Debug\nunit.framework.dll
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\bin\Debug\IT7302_MonopolyProject_21102588_JoshuaCandish.pdb
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\bin\Debug\nunit.framework.xml
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\obj\Debug\MonopolyTests.csprojResolveAssemblyReference.cache
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\obj\Debug\Tests.dll
+C:\Users\Joshua\Documents\Dev\IT7302_Assignment3_Monopoly\Tests\obj\Debug\Tests.pdb
