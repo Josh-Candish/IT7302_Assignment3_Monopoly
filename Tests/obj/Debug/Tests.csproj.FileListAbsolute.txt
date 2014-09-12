@@ -1,0 +1,9 @@
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\bin\Debug\Tests.dll
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\bin\Debug\Tests.pdb
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\bin\Debug\IT7302_MonopolyProject_21102588_JoshuaCandish.exe
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\bin\Debug\nunit.framework.dll
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\bin\Debug\IT7302_MonopolyProject_21102588_JoshuaCandish.pdb
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\bin\Debug\nunit.framework.xml
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\obj\Debug\Tests.csprojResolveAssemblyReference.cache
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\obj\Debug\Tests.dll
+C:\Users\Joshua\Desktop\IT7302_MonopolyProject_21102588_JoshuaCandish\Tests\obj\Debug\Tests.pdb

@@ -1,0 +1,85 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish
+{
+    public class Board
+    {
+        private static Board _board;
+        private ArrayList Properties;
+        private ArrayList Players;
+        private int Squares = 40;
+
+        // Singleton method to access
+        public static Board Access()
+        {
+            return _board ?? (_board = new Board());
+        }
+
+        public Board()
+        {
+            Properties = new ArrayList(GetSquares());
+            Players = new ArrayList();
+        }
+
+        public void AddPlayer(Player player)
+        {
+            Players.Add(player);
+        }
+
+        public void AddProperty(Property property)
+        {
+            Properties.Add(property);
+        }
+
+        public override string ToString()
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Getters/Setters
+
+        public int GetSquares()
+        {
+            return Squares;
+        }
+
+        public Property GetProperty(int propertyIndex)
+        {
+            return (Property)Properties[propertyIndex];
+        }
+
+        public ArrayList GetProperties()
+        {
+            return Properties;
+        }
+
+        public ArrayList GetPlayers()
+        {
+            return Players;
+        }
+
+        public Player GetPlayer(string name)
+        {
+            foreach (Player player in Players)
+            {
+                if (player.GetName() == name)
+                {
+                    return player;
+                }
+            }
+
+            return null;
+        }
+
+        public int GetPlayerCount()
+        {
+            return Players.Count;
+        }
+
+        #endregion
+    }
+}
