@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using IT7302_MonopolyProject_21102588_JoshuaCandish;
 using NUnit.Framework;
 
@@ -47,6 +49,40 @@ namespace Tests
             _trader.Receive(_amount);
 
             Assert.AreEqual(_expected, _trader.GetBalance());
+        }
+
+        [Test]
+        public void to_string_has_correct_output()
+        {
+            _trader.SetName("Josh");
+            _trader.SetBalance(500);
+
+            const string expected = "Name: Josh \nBalance: 500";
+
+            var actual = _trader.ToString();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void when_a_property_is_obtained_it_should_be_included_in_properties_owned()
+        {
+            var property = new Property("Wiklow Street");
+
+            var propertiesOwned = _trader.GetPropertiesOwned();
+
+            // first test that the trader has no properties owned at this stage
+            Assert.AreEqual(propertiesOwned.Count, 0);
+
+            _trader.ObtainProperty(ref property);
+
+            // test that a property has been obtained
+            Assert.AreEqual(propertiesOwned.Count, 1);
+
+            var propertyOwned = (Property) propertiesOwned[0];
+
+            // test that the actual property in PropetiesOwned is the sames as the property added
+            Assert.AreEqual(propertyOwned, property);
         }
     }
 }
