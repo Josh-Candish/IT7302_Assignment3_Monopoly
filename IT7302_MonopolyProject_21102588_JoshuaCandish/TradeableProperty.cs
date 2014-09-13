@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
-    public class TradeableProperty : Property
+    public abstract class TradeableProperty : Property
     {
-        private readonly decimal _price;
-        private readonly decimal _mortgageValue;
-        private readonly decimal _rent;
+        protected decimal Price;
+        protected decimal MortgageValue;
+        protected decimal Rent;
 
-        public TradeableProperty()
+        protected TradeableProperty()
         {
-            _price = 200;
-            _mortgageValue = 100;
-            _rent = 50;
+            Price = 200;
+            MortgageValue = 100;
+            Rent = 50;
         }
-
-       
 
         public virtual void PayRent(ref Player player)
         {
-            player.Pay(_rent);
-            GetOwner().Receive(_rent);
+            player.Pay(Rent);
+            GetOwner().Receive(Rent);
         }
 
         public void Purchase(ref Player buyer)
@@ -64,17 +59,17 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public decimal GetPrice()
         {
-            return _price;
+            return Price;
         }
 
         public decimal GetMortgageValue()
         {
-            return _mortgageValue;
+            return MortgageValue;
         }
 
         public virtual decimal GetRent()
         {
-            return _rent;
+            return Rent;
         }
 
         #endregion
