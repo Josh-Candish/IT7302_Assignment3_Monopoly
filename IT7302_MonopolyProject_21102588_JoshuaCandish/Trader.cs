@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
@@ -75,6 +71,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public string GetName()
         {
             return Name;
+        }
+
+        public ArrayList GetPropertiesOwned()
+        {
+            return PropertiesOwned;
         }
 
         public void SetName(string value)
