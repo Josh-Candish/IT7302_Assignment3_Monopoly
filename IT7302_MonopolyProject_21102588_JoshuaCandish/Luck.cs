@@ -2,23 +2,23 @@
 {
     public class Luck : Property
     {
-        private bool _isBenefitNotPenalty;
+        private bool _isPenalty;
         private decimal _penaltyOrBenefitAmount;
 
         public Luck() : this("Luck Property", true, 50)
         {
         }
 
-        public Luck(string name, bool isBenefitNotPenalty, decimal penaltyOrBenefitAmount)
+        public Luck(string name, bool isPenalty, decimal penaltyOrBenefitAmount)
         {
             Name = name;
-            _isBenefitNotPenalty = isBenefitNotPenalty;
+            _isPenalty = isPenalty;
             _penaltyOrBenefitAmount = penaltyOrBenefitAmount;
         }
 
         public override string LandOn(ref Player player)
         {
-            if (_isBenefitNotPenalty)
+            if (!_isPenalty)
             {
                 player.Receive(_penaltyOrBenefitAmount);
                 return base.LandOn(ref player) +

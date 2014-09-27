@@ -5,14 +5,12 @@
         protected string Name;
         protected Trader Owner;
 
-        public Property()
-        {
-            
-        }
+        public Property() : this("Property") { }
 
         public Property(string name)
         {
             Name = name;
+            Owner = Banker.Access();
         }
 
         public Property(string name, ref Trader owner)

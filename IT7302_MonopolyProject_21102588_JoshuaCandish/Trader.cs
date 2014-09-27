@@ -73,17 +73,12 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             return Name;
         }
 
-        public ArrayList GetPropertiesOwned()
-        {
-            return PropertiesOwned;
-        }
-
         public void SetName(string value)
         {
             Name = value;
         }
 
-        internal ArrayList GetPropertiesOwnedToString()
+        public ArrayList GetPropertiesOwned()
         {
             return PropertiesOwned;
         }

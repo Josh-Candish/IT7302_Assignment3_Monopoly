@@ -25,8 +25,14 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public Player(string name)
         {
-            Name = name;
+            Name = name.Trim();
             Balance = InitialValueAccessor.GetPlayerStartingBanker();
+            _location = 0;
+        }
+
+        public Player(string name, decimal balance)
+            : base(name, balance)
+        {
             _location = 0;
         }
 
@@ -46,15 +52,26 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public string BriefDetailToString()
         {
-            return string.Format("Player: {0}.\nBalance: ${1}\nLocation:{2} (Square {3})\nProperties Owned: \n{4}",
-                GetName(), GetBalance(), Board.Access().GetProperty(GetLocation()), GetLocation(),
-                GetPropertiesOwnedToString());
+            return String.Format("You are on {0}.\tYou have ${1}.", Board.Access().GetProperty(GetLocation()).GetName(), GetBalance());
         }
 
         public string FullDetailToString()
         {
-            return string.Format("You are on {0}. \t You have ${1}", Board.Access().GetProperty(GetLocation()).GetName(),
-                GetBalance());
+            return String.Format("Player:{0}.\nBalance: ${1}\nLocation: {2} (Square {3}) \nProperties Owned:\n{4}", GetName(), GetBalance(), Board.Access().GetProperty(GetLocation()), GetLocation(), PropertiesOwnedToString());
+        }
+
+        public string PropertiesOwnedToString()
+        {
+            string owned = "";
+            //if none return none
+            if (GetPropertiesOwnedFromBoard().Count == 0)
+                return "None";
+            //for each property owned add to string owned
+            for (int i = 0; i < GetPropertiesOwnedFromBoard().Count; i++)
+            {
+                owned += GetPropertiesOwnedFromBoard()[i].ToString() + "\n";
+            }
+            return owned;
         }
 
         public string DiceRollingToString()

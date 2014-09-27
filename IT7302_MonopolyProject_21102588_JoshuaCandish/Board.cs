@@ -32,11 +32,6 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Properties.Add(property);
         }
 
-        public override string ToString()
-        {
-            throw new NotImplementedException();
-        }
-
         #region Getters/Setters
 
         public int GetSquares()
@@ -57,6 +52,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public ArrayList GetPlayers()
         {
             return Players;
+        }
+
+        public Player GetPlayer(int playerIndex)
+        {
+            return (Player)Players[playerIndex];
         }
 
         public Player GetPlayer(string name)

@@ -4,6 +4,9 @@
     {
         static void Main(string[] args)
         {
+            Game game = new Monopoly();
+
+            game.InitialiseGame();
         }
     }
 }
