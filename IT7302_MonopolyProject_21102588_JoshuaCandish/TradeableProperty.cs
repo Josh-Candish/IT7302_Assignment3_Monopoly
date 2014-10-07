@@ -47,7 +47,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 //pay rent
                 PayRent(ref player);
                 return base.LandOn(ref player) +
-                       string.Format("Rent has been paid for {0} of ${1} to {2}", GetName(), GetRent(), Owner.GetName());
+                       string.Format("\nRent has been paid for {0} of ${1} to {2}", GetName(), GetRent(), Owner.GetName());
             }
             else
             {

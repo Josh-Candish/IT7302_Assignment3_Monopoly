@@ -4,8 +4,8 @@
     {
         private decimal HouseCost;
         private int HouseCount;
-        private static int MaxHouses;
-        
+        private const int MaxHouses = 4;
+
         public Residential() : this ("Residential Property") {}
 
         public Residential(string name) : this(name,200,50,50) {}
@@ -24,7 +24,7 @@
             return Rent + (Rent * HouseCount);
         }
 
-        public void AddHouses()
+        public void AddHouse()
         {
             GetOwner().Pay(HouseCost);
             HouseCount++;

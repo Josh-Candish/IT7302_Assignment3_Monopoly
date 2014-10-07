@@ -8,21 +8,5 @@
         public abstract void InitialiseGame();
         public abstract void MakePlay(int player);
         public abstract void PrintWinner();
-
-        public void PlayOneGame(int playerCount)
-        {
-            _playerCount = playerCount;
-            InitialiseGame();
-
-            var j = 0;
-
-            while (!EndOfGame())
-            {
-                MakePlay(j);
-                j += 1;
-            }
-
-            PrintWinner();
-        }
     }
 }
