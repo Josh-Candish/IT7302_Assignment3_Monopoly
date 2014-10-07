@@ -10,6 +10,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         private bool _isActive = true;
         private Die _die1 = new Die();
         private Die _die2 = new Die();
+        private int _die1Result;
+        private int _die2Result;
 
         #region Events
 
@@ -37,8 +39,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         }
 
         public void Move()
-        {  
-            var moveDistance = _die1.Roll() + _die2.Roll();
+        {
+            _die1Result = _die1.Roll();
+            _die2Result = _die2.Roll();
+
+            var moveDistance = _die1Result + _die2Result;
 
             SetLocation(GetLocation() + moveDistance);
 
@@ -76,7 +81,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public string DiceRollingToString()
         {
-            return string.Format("Rolling dice: \t Dice 1: {0} \t Dice 2: {1}", _die1, _die2);
+            return string.Format("Rolling dice: \t Dice 1: {0} \t Dice 2: {1}", _die1Result, _die2Result);
         }
 
         public override void CheckBankrupt()

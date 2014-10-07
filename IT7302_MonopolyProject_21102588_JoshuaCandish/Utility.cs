@@ -12,11 +12,6 @@
             Owner = Banker.Access();
         }
 
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
         public override void PayRent(ref Player player)
         {
             player.Pay(GetRent(ref player));
