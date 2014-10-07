@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using IT7302_MonopolyProject_21102588_JoshuaCandish;
+using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 using NUnit.Framework;
 
 namespace Tests
@@ -12,6 +13,7 @@ namespace Tests
         private Trader _trader;
         private int _amount;
         private int _expected;
+        private readonly TestHelpers _testHelper = new TestHelpers();
 
         [TestFixtureSetUp]
         public void BeforeAll()
@@ -54,12 +56,11 @@ namespace Tests
         [Test]
         public void to_string_has_correct_output()
         {
-            _trader.SetName("Josh");
-            _trader.SetBalance(500);
+            var trader = new Trader("Josh", 500);
 
             const string expected = "Name: Josh \nBalance: 500";
 
-            var actual = _trader.ToString();
+            var actual = trader.ToString();
 
             Assert.AreEqual(expected, actual);
         }
@@ -79,10 +80,34 @@ namespace Tests
             // test that a property has been obtained
             Assert.AreEqual(propertiesOwned.Count, 1);
 
-            var propertyOwned = (Property) propertiesOwned[0];
+            var propertyOwned = (Property)propertiesOwned[0];
 
             // test that the actual property in PropetiesOwned is the sames as the property added
             Assert.AreEqual(propertyOwned, property);
+        }
+
+        [Test]
+        public void when_trading_property_owner_becomes_purchaser()
+        {
+            var purchaser = new Player("Hubert");
+
+            var tradeableProperty = _testHelper.TradeProperty(purchaser);
+            
+            Assert.AreEqual(tradeableProperty.GetOwner(), purchaser);
+        }
+
+        [Test]
+        public void after_trading_property_purchasers_balance_is_modified_correctly()
+        {
+            var purchaser = new Player("Josh");
+            var purchaserBalanceBeforePurchase = purchaser.GetBalance();
+
+            var tradeableProperty = _testHelper.TradeProperty(purchaser);
+
+            var expectedPurchaserBalanceAfterPurchase = (purchaserBalanceBeforePurchase - tradeableProperty.GetPrice());
+            var actualPurchaserBalanceAfterPurchase = purchaser.GetBalance();
+
+            Assert.AreEqual(expectedPurchaserBalanceAfterPurchase, actualPurchaserBalanceAfterPurchase);
         }
     }
 }
