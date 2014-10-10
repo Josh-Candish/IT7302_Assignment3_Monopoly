@@ -81,25 +81,26 @@ namespace Tests
         [Test]
         public void verify_ToString_methods()
         {
-            // need to add a property to the board for these tests
+            // need to reset and add a property to the board for these tests
             var luckFactory = new LuckFactory();
+            Board.Access().ResetBoard();
             Board.Access().AddProperty(luckFactory.create("Go", false, 200));
 
             _emptyPlayer.SetBalance(500);
             _emptyPlayer.SetName("Josh");
-            _emptyPlayer.SetLocation(3);
+            _emptyPlayer.SetLocation(0);
 
             const string expectedStandardToString = "Josh";
             var actualStandardToString = _emptyPlayer.ToString();
 
             Assert.AreEqual(expectedStandardToString, actualStandardToString);
 
-            const string expectedBriefDetailToString = "You are on Railway Station.\tYou have $500.";
+            const string expectedBriefDetailToString = "You are on Go.\tYou have $500.";
             var actualBriefDetailToString = _emptyPlayer.BriefDetailToString();
 
             Assert.AreEqual(expectedBriefDetailToString, actualBriefDetailToString);
 
-            var expectedFullDetailToString = string.Format("Player:Josh.\nBalance: $500\nLocation: Railway Station: \t Owned by: Josh (Square 3) \nProperties Owned:\n{0}", _emptyPlayer.PropertiesOwnedToString());
+            var expectedFullDetailToString = string.Format("Player:Josh.\nBalance: $500\nLocation: Go: \t Owned by: Leeroy Jenkins (Square 0) \nProperties Owned:\n{0}", _emptyPlayer.PropertiesOwnedToString());
             var actualFullDetailToString = _emptyPlayer.FullDetailToString();
 
             Assert.AreEqual(expectedFullDetailToString, actualFullDetailToString);

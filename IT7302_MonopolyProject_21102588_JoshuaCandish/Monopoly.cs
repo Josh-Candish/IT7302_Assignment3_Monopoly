@@ -81,7 +81,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Console.WriteLine("The game is now over. Please press enter to exit.");
             Console.ReadLine();
             //exit the program
-            Environment.Exit(0);
+            Board.Access().SetGameOver(true);
             return true;
         }
 
@@ -160,13 +160,16 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void PlayGame()
         {
-            while (Board.Access().GetPlayerCount() >= 2)
+            while (Board.Access().GetPlayerCount() >= 2 && !Board.Access().GetGameOver())
             {
                 for (int i = 0; i < Board.Access().GetPlayerCount(); i++)
                 {
-                    this.MakePlay(i);
+                    // If the game is over don't make them play
+                    if (Board.Access().GetGameOver()) break;
+
+                    MakePlay(i);
                 }
-            } 
+            }
         }
 
         public int InputInteger() //0 is invalid input
@@ -375,14 +378,14 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 }
         }
 
-        public void PurchaseProperty(Player player)
+        public void PurchaseProperty(Player player, bool? testAnswer = null)
         {
             //if property available give option to purchase else so not available
             if (Board.Access().GetProperty(player.GetLocation()).AvailableForPurchase())
             {
                 TradeableProperty propertyLocatedOn = (TradeableProperty)Board.Access().GetProperty(player.GetLocation());
-                bool respYN = GetInputYn(player, string.Format("'{0}' is available to purchase for ${1}. Are you sure you want to purchase it?", propertyLocatedOn.GetName(), propertyLocatedOn.GetPrice()));
-                if (respYN)
+                bool? respYN = testAnswer ?? GetInputYn(player, string.Format("'{0}' is available to purchase for ${1}. Are you sure you want to purchase it?", propertyLocatedOn.GetName(), propertyLocatedOn.GetPrice()));
+                if ((bool) respYN)
                 {
                     propertyLocatedOn.Purchase(ref player);//purchase property
                     Console.WriteLine("{0}You have successfully purchased {1}.", PlayerPrompt(player), propertyLocatedOn.GetName());
