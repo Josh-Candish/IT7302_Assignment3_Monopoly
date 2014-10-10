@@ -9,6 +9,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         private ArrayList Properties;
         private ArrayList Players;
         private int Squares = 40;
+        private bool _gameOver;
 
         // Singleton method to access
         public static Board Access()
@@ -75,6 +76,24 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public int GetPlayerCount()
         {
             return Players.Count;
+        }
+
+        public bool GetGameOver()
+        {
+            return _gameOver;
+        }
+
+        public void SetGameOver(bool gameOver)
+        {
+            _gameOver = gameOver;
+        }
+
+        /// <summary>
+        /// VIOLATES SINGLETON PATTERN ***DO NOT USE, EXCEPT FOR TESTS***
+        /// </summary>
+        public void ResetBoard()
+        {
+            _board = null;
         }
 
         #endregion
