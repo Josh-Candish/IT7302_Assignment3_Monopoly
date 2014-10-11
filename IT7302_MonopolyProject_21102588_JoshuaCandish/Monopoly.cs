@@ -261,18 +261,28 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
         }
 
-        public void SetUpPlayers()
+        /// <summary>
+        /// Sets up players for the new game of Monopoly
+        /// </summary>
+        /// <param name="testInput">Required so we can test this method without relying on console input, shouldn't be used outside of tests</param>
+        /// <param name="testName">Required so we can test this method without relying on console input, shouldn't be used  outside of tests</param>
+        public void SetUpPlayers(int? testInput = null, string testName = null)
         {
             //Add players to the board
             Console.WriteLine("How many players are playing?");
             Console.Write("(2-8)>");
-            int playerCount = this.InputInteger();
+            var playerCount = testInput ?? InputInteger();
 
             //if it is out of range then display msg and redo this method
             if ((playerCount < 2) || (playerCount > 8))
             {
                 Console.WriteLine("That is an invalid amount. Please try again.");
-                this.SetUpPlayers();
+
+                // Don't recall if it's a test
+                if (testInput == null)
+                {
+                    SetUpPlayers();
+                }
             }
 
             //Ask for players names
@@ -280,7 +290,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             {
                 Console.WriteLine("Please enter the name for Player {0}:", i + 1);
                 Console.Write(">");
-                string sPlayerName = Console.ReadLine();
+                string sPlayerName = testName ?? Console.ReadLine();
                 Player player = new Player(sPlayerName);
                 //subscribe to events
                 player.PlayerBankrupt += playerBankruptHandler;

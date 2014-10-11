@@ -84,5 +84,36 @@ namespace Tests
 
             Assert.AreEqual(propertyOwner, _player1);
         }
+
+        [Test]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void setting_up_players_fails_with_less_than_2_players()
+        {
+            Board.Access().ResetBoard();
+            _gameOfMonopoly = new Monopoly();
+            _gameOfMonopoly.SetUpProperties();
+
+            _gameOfMonopoly.SetUpPlayers(1);
+        }
+
+        [Test]
+        public void setting_up_players_with_valid_players()
+        {
+            Board.Access().ResetBoard();
+            _gameOfMonopoly = new Monopoly();
+            _gameOfMonopoly.SetUpProperties();
+
+            _gameOfMonopoly.SetUpPlayers(2,"Josh");
+
+            Assert.AreEqual(2, Board.Access().GetPlayerCount());
+        }
+
+        [Test]
+        public void Events()
+        {
+            // Check logs correct output to console
+            Monopoly.playerBankruptHandler(_player1, EventArgs.Empty);
+            Monopoly.playerPassGoHandler(_player1, EventArgs.Empty);
+        }
     }
 }
