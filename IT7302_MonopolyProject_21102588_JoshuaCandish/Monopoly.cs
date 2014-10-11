@@ -215,74 +215,74 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void SetUpProperties()
         {
-            //Create instances of property factories
-            LuckFactory luckFactory = new LuckFactory();
-            ResidentialFactory resFactory = new ResidentialFactory();
-            TransportFactory transFactory = new TransportFactory();
-            UtilityFactory utilFactory = new UtilityFactory();
-            PropertyFactory genericFactory = new PropertyFactory();
+            var luckFactory = new LuckFactory();
+            var resFactory = new ResidentialFactory();
+            var transFactory = new TransportFactory();
+            var utilFactory = new UtilityFactory();
+            var genericFactory = new PropertyFactory();
 
-            //Create properties and add them to the board
-            //Loading property details from file has not been implemented
-            //Property names are taken from the "Here and Now" New Zealand version of monopoly
-            //Rents are tenth of cost of property
-            //Colours have not been implemented
-            Board.Access().AddProperty(luckFactory.create("Go", false, 200));
-            Board.Access().AddProperty(resFactory.create("Ohakune Carrot", 60, 6, 50));
-            Board.Access().AddProperty(luckFactory.create("Community Chest", false, 50)); // not properly implemented just 50 benefit
-            Board.Access().AddProperty(resFactory.create("Te Puke, Giant Kiwifruit", 60, 6, 50));
-            Board.Access().AddProperty(luckFactory.create("Income Tax", true, 200));
-            Board.Access().AddProperty(transFactory.create("Auckland International Airport"));
-            Board.Access().AddProperty(resFactory.create("Te Papa", 100, 10, 50));
-            Board.Access().AddProperty(luckFactory.create("Chance", true, 50)); // not properly implemented just 50 penalty
-            Board.Access().AddProperty(resFactory.create("Waitangi Treaty Grounds", 100, 10, 50));
-            Board.Access().AddProperty(resFactory.create("Larnach Castle", 120, 12, 50));
-            Board.Access().AddProperty(genericFactory.Create("Jail")); //not properly implemented just a property that does nothing
-            Board.Access().AddProperty(resFactory.create("Cape Reinga Lighthouse", 140, 14, 100));
-            Board.Access().AddProperty(utilFactory.create("Mobile Phone Company"));
-            Board.Access().AddProperty(resFactory.create("Lake Taupo", 140, 14, 100));
-            Board.Access().AddProperty(resFactory.create("Queenstown Ski Fields", 160, 16, 100));
-            Board.Access().AddProperty(transFactory.create("Dunedin Railway Station"));
-            Board.Access().AddProperty(resFactory.create("Fox Glacier", 180, 18, 100));
-            Board.Access().AddProperty(luckFactory.create("Community Chest", false, 50)); // not properly implemented just 50 benefit
-            Board.Access().AddProperty(resFactory.create("Milford Sound", 180, 18, 100));
-            Board.Access().AddProperty(resFactory.create("Mt Cook", 200, 20, 100));
-            Board.Access().AddProperty(genericFactory.Create("Free Parking")); //not properly implemented just a property that does nothing
-            Board.Access().AddProperty(resFactory.create("Ninety Mile Beach", 220, 22, 150));
-            Board.Access().AddProperty(luckFactory.create("Chance", true, 50)); // not properly implemented just 50 penalty
-            Board.Access().AddProperty(resFactory.create("Golden Bay", 220, 22, 150));
-            Board.Access().AddProperty(resFactory.create("Moeraki Boulders, Oamaru", 240, 24, 150));
-            Board.Access().AddProperty(transFactory.create("Port Tauranga"));
-            Board.Access().AddProperty(resFactory.create("Waitomo Caves", 260, 26, 150));
-            Board.Access().AddProperty(resFactory.create("Mt Maunganui", 260, 26, 150));
-            Board.Access().AddProperty(utilFactory.create("Internet Service Provider"));
-            Board.Access().AddProperty(resFactory.create("Art Deco Buildings, Napier", 280, 28, 150));
-            Board.Access().AddProperty(genericFactory.Create("Go to Jail")); //not properly implemented just a property that does nothing
-            Board.Access().AddProperty(resFactory.create("Cable Cars Wellington", 300, 30, 200));
-            Board.Access().AddProperty(resFactory.create("Cathedral Square", 300, 30, 200));
-            Board.Access().AddProperty(luckFactory.create("Community Chest", false, 50)); // not properly implemented just 50 benefit
-            Board.Access().AddProperty(resFactory.create("The Square, Palmerston North", 320, 32, 200));
-            Board.Access().AddProperty(transFactory.create("Picton Ferry"));
-            Board.Access().AddProperty(luckFactory.create("Chance", true, 50)); // not properly implemented just 50 penalty
-            Board.Access().AddProperty(resFactory.create("Pukekura Park, Festival of Lights", 350, 35, 200));
-            Board.Access().AddProperty(luckFactory.create("Super Tax", true, 100));
-            Board.Access().AddProperty(resFactory.create("Rangitoto", 400, 40, 200));
+            try
+            {
+                var fileReader = new FileReader();
+                var propertyDetails = fileReader.ReadPropertyDetailsFromCSV();
 
-            Console.WriteLine("Properties have been setup");
+                // Add the properties to the board
+                foreach (var propertyDetail in propertyDetails)
+                {
+                    switch (propertyDetail.Type.ToLower())
+                    {
+                        case "luck":
+                            Board.Access()
+                                .AddProperty(luckFactory.create(propertyDetail.Name, propertyDetail.IsPenalty,
+                                    propertyDetail.Amount));
+                            break;
+                        case "residential":
+                            Board.Access()
+                                .AddProperty(resFactory.create(propertyDetail.Name, propertyDetail.Price,
+                                    propertyDetail.Rent, propertyDetail.HouseCost));
+                            break;
+                        case "transport":
+                            Board.Access().AddProperty(transFactory.create(propertyDetail.Name));
+                            break;
+                        case "utility":
+                            Board.Access().AddProperty(utilFactory.create(propertyDetail.Name));
+                            break;
+                        case "generic":
+                            Board.Access().AddProperty(genericFactory.Create(propertyDetail.Name));
+                            break;
+                    }
+                }
+
+                Console.WriteLine("Properties have been setup");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Oops, something went wrong setting up the properties: {0}", ex.Message); 
+            }
         }
 
-        public void SetUpPlayers()
+        /// <summary>
+        /// Sets up players for the new game of Monopoly
+        /// </summary>
+        /// <param name="testInput">Required so we can test this method without relying on console input, shouldn't be used outside of tests</param>
+        /// <param name="testName">Required so we can test this method without relying on console input, shouldn't be used  outside of tests</param>
+        public void SetUpPlayers(int? testInput = null, string testName = null)
         {
             //Add players to the board
             Console.WriteLine("How many players are playing?");
             Console.Write("(2-8)>");
-            int playerCount = this.InputInteger();
+            var playerCount = testInput ?? InputInteger();
 
             //if it is out of range then display msg and redo this method
             if ((playerCount < 2) || (playerCount > 8))
             {
                 Console.WriteLine("That is an invalid amount. Please try again.");
-                this.SetUpPlayers();
+
+                // Don't recall if it's a test
+                if (testInput == null)
+                {
+                    SetUpPlayers();
+                }
             }
 
             //Ask for players names
@@ -290,7 +290,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             {
                 Console.WriteLine("Please enter the name for Player {0}:", i + 1);
                 Console.Write(">");
-                string sPlayerName = Console.ReadLine();
+                string sPlayerName = testName ?? Console.ReadLine();
                 Player player = new Player(sPlayerName);
                 //subscribe to events
                 player.PlayerBankrupt += playerBankruptHandler;
