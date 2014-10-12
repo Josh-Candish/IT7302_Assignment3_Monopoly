@@ -108,5 +108,136 @@ namespace Tests
             const string expectedDiceRollToString = "Rolling dice: \t Dice 1: 0 \t Dice 2: 0";
             var actualDiceRollToString = _emptyPlayer.DiceRollingToString();
         }
+
+        [Test]
+        public void setting_location_not_greater_than_board()
+        {
+            FreshBoard();
+
+            _emptyPlayer.SetLocation(30);
+
+            var expectedProperty = Board.Access().GetProperty(30);
+            var actualProperty = Board.Access().GetProperty(_emptyPlayer.GetLocation());
+
+            Assert.AreEqual(expectedProperty, actualProperty);
+        }
+
+        [Test]
+        public void setting_location_greater_than_board()
+        {
+            FreshBoard();
+
+            _emptyPlayer.SetLocation(49);
+
+            const string expectedPropertyName = "Waitangi Treaty Grounds";
+            var actualPropertyName = Board.Access().GetProperty(_emptyPlayer.GetLocation()).GetName();
+
+            Assert.AreEqual(expectedPropertyName, actualPropertyName);
+        }
+
+        [Test]
+        public void setting_location_to_board_size()
+        {
+            FreshBoard();
+
+            _emptyPlayer.SetLocation(40);
+
+            var expectedPropertyName = "Rangitoto";
+            var actualPropertyName = Board.Access().GetProperty(_emptyPlayer.GetLocation()).GetName();
+
+            Assert.AreEqual(expectedPropertyName, actualPropertyName);
+
+            _emptyPlayer.SetLocation(41);
+
+            expectedPropertyName = "Go";
+            actualPropertyName = Board.Access().GetProperty(_emptyPlayer.GetLocation()).GetName();
+
+            Assert.AreEqual(expectedPropertyName, actualPropertyName);
+        }
+
+        [Test]
+        public void landing_on_go_to_jail_sends_player_to_jail()
+        {
+            FreshBoard();
+            PutPlayerInJail();
+
+            Assert.IsTrue(_emptyPlayer.IsInJail);
+
+            // Check they are now on the jail property
+            Assert.AreEqual(Board.Access().GetProperty(10), Board.Access().GetProperty(_emptyPlayer.GetLocation()));
+        }
+
+        [Test]
+        public void paying_fee_gets_out_of_jail()
+        {
+            PutPlayerInJail();
+
+            Assert.IsTrue(_emptyPlayer.IsInJail);
+            _emptyPlayer.SetBalance(500);
+            _emptyPlayer.PayJailFee();
+
+            Assert.IsFalse(_emptyPlayer.IsInJail);
+        }
+
+        [Test]
+        public void paying_fee_without_enough_money_stays_in_jail()
+        {
+            PutPlayerInJail();
+
+            Assert.IsTrue(_emptyPlayer.IsInJail);
+
+            _emptyPlayer.SetBalance(10);
+            _emptyPlayer.PayJailFee();
+
+            Assert.IsTrue(_emptyPlayer.IsInJail);
+        }
+
+        [Test]
+        public void failure_to_roll_doubles_in_jail()
+        {
+            FreshBoard();
+            PutPlayerInJail();
+
+            Assert.IsTrue(_emptyPlayer.IsInJail);
+
+            Assert.AreEqual(0, _emptyPlayer.RollDoublesFailureCount);
+
+            _emptyPlayer.Move();
+
+            if (!_emptyPlayer.RolledDoubles) Assert.AreEqual(1, _emptyPlayer.RollDoublesFailureCount);
+        }
+
+        [Test]
+        public void player_move_in_jail_doesnt_actually_move()
+        {
+            FreshBoard();
+            PutPlayerInJail();
+
+            var locationBeforeMove = _emptyPlayer.GetLocation();
+
+            _emptyPlayer.Move();
+
+            var locationAfterMove = _emptyPlayer.GetLocation();
+
+            Assert.AreEqual(locationBeforeMove, locationAfterMove);
+        }
+
+        #region Helpers
+
+        private void PutPlayerInJail()
+        {
+            _emptyPlayer.SetLocation(30);
+            _emptyPlayer.IsCriminal();
+        }
+
+        private static void FreshBoard()
+        {
+            Board.Access().ResetBoard();
+            // Need to add all properties to board
+            var monopoly = new Monopoly();
+            monopoly.SetUpProperties();
+        }
+
+        #endregion
     }
 }
