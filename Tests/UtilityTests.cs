@@ -7,6 +7,13 @@ namespace Tests
     [TestFixture]
     public class UtilityTest
     {
+        [TestFixtureSetUp]
+        public void SetUp()
+        {
+            var monopoly = new Monopoly();
+            monopoly.SetUpProperties();
+        }
+
         [Test]
         public void paying_rent()
         {
@@ -26,6 +33,7 @@ namespace Tests
             decimal balance = 1500 - (6 * i);
             Assert.AreEqual(balance, p.GetBalance());
         }
+
         [Test]
         public void landing_on_a_property()
         {

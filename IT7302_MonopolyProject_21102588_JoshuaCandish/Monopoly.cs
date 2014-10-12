@@ -50,8 +50,6 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                
                 return;
             }
-            
-            
 
             //prompt player to make move
             Console.WriteLine("{0}Your turn. Press Enter to make move", PlayerPrompt(iPlayerIndex));
@@ -59,20 +57,37 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             //move player
             player.Move();
 
+            if (player.IsInJail && player.RolledDoubles && (player.RollDoublesFailureCount < 3))
+            {
+                player.SetFreeFromJail();
+                Console.WriteLine("You rolled doubles! You are out of Jail.");
+            }
+
+            if (player.IsInJail && player.RollDoublesFailureCount == 3)
+            {
+                Console.WriteLine("You've failed to roll doubles three times while in Jail and must now settle it.");
+                GetOutOfJail(player, true);            
+            }
+
             //Display making move
             Console.WriteLine("*****Move for {0}:*****", player.GetName());
             //Display rolling
-           Console.WriteLine("{0}{1}\n", PlayerPrompt(iPlayerIndex), player.DiceRollingToString());
+            Console.WriteLine("{0}{1}\n", PlayerPrompt(iPlayerIndex), player.DiceRollingToString());
 
             Property propertyLandedOn = Board.Access().GetProperty(player.GetLocation());
             //landon property and output to console
             Console.WriteLine(propertyLandedOn.LandOn(ref player));
             //Display player details
             Console.WriteLine("\n{0}{1}", PlayerPrompt(iPlayerIndex), player.BriefDetailToString());
+
+            if (player.IsCriminal())
+            {
+                Console.WriteLine("You landed on Go To Jail, you are now in Jail and lose your turn.");
+                return;
+            }
+
             //display player choice menu
             DisplayPlayerChoiceMenu(player);
-
-            
         }
 
         public override bool EndOfGame()
@@ -341,7 +356,9 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Console.WriteLine("3. Purchase This Property");
             Console.WriteLine("4. Buy House for Property");
             Console.WriteLine("5. Trade Property with Player");
-            Console.Write("(1-5)>");
+            if (player.IsInJail) Console.WriteLine("6. Get Out of Jail");
+
+            Console.Write(player.IsInJail ? "(1-6)>" : "(1-5)>");
             //read response
             resp = InputInteger();
             //if response is invalid redisplay menu
@@ -357,31 +374,39 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         Console.WriteLine("==================================");
                         Console.WriteLine(player.FullDetailToString());
                         Console.WriteLine("==================================");
-                        this.DisplayPlayerChoiceMenu(player);
+                        DisplayPlayerChoiceMenu(player);
                         break;
                     case 3:
-                        this.PurchaseProperty(player);
-                        this.DisplayPlayerChoiceMenu(player);
+                        PurchaseProperty(player);
+                        DisplayPlayerChoiceMenu(player);
                         break;
                     case 4:
-                        this.BuyHouse(player);
-                        this.DisplayPlayerChoiceMenu(player);
+                        BuyHouse(player);
+                        DisplayPlayerChoiceMenu(player);
                         break;
                     case 5:
-                        this.TradeProperty(player);
-                        this.DisplayPlayerChoiceMenu(player);
+                        TradeProperty(player);
+                        DisplayPlayerChoiceMenu(player);
+                        break;
+                    case 6:
+                        GetOutOfJail(player, false);
+                        DisplayPlayerChoiceMenu(player);
                         break;
                     default:
                         Console.WriteLine("That option is not avaliable. Please try again.");
-                        this.DisplayPlayerChoiceMenu(player);
+                        DisplayPlayerChoiceMenu(player);
                         break;
                 }
         }
 
         public void PurchaseProperty(Player player, bool? testAnswer = null)
         {
+            if (player.IsInJail)
+            {
+                Console.WriteLine("You are in Jail and can not purchase property.");
+            }
             //if property available give option to purchase else so not available
-            if (Board.Access().GetProperty(player.GetLocation()).AvailableForPurchase())
+            else if (Board.Access().GetProperty(player.GetLocation()).AvailableForPurchase())
             {
                 TradeableProperty propertyLocatedOn = (TradeableProperty)Board.Access().GetProperty(player.GetLocation());
                 bool? respYN = testAnswer ?? GetInputYn(player, string.Format("'{0}' is available to purchase for ${1}. Are you sure you want to purchase it?", propertyLocatedOn.GetName(), propertyLocatedOn.GetPrice()));
@@ -399,6 +424,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void BuyHouse(Player player)
         {
+            if (player.IsInJail)
+            {
+                Console.WriteLine("Sorry, you are in jail.");
+                return;
+            }
             //create prompt
             string sPrompt = String.Format("{0}Please select a property to buy a house for:", this.PlayerPrompt(player));
             //create variable for propertyToBuy
@@ -565,6 +595,45 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         return p;
                 }
                 return null;
+            }
+        }
+
+        private void GetOutOfJail(Player player, bool mustSettle)
+        {
+            Console.WriteLine();
+            Console.WriteLine("1. Pay $50 fine");
+            Console.WriteLine("2. Use 'Get Out of Jail Free' card");
+            if(!mustSettle) Console.WriteLine("3. Back to Main Menu");
+            Console.Write(mustSettle ? "(1-2)>" : "(1-3)>");
+
+            //read response
+            var resp = InputInteger();
+
+            //if response is invalid redisplay menu
+            if (resp == 0)
+                GetOutOfJail(player, mustSettle);
+
+            if (mustSettle && resp != 1 && resp != 2)
+            {
+                Console.WriteLine("You must get out of Jail");
+                GetOutOfJail(player, true);
+            }
+
+            switch (resp)
+            {
+                case 1:
+                    Console.WriteLine(player.PayJailFee()
+                        ? "You are now out of jail"
+                        : "You have insufficient funds and are still in jail");
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                default:
+                    Console.WriteLine("That option is not avaliable. Please try again.");
+                    GetOutOfJail(player, mustSettle);
+                    break;
             }
         }
 
