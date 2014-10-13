@@ -13,6 +13,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         private int _die1Result;
         private int _die2Result;
         public int RollDoublesFailureCount;
+        public int RolledDoublesCount;
         public bool RolledDoubles;
 
         public bool IsInJail { get; set; }
@@ -48,24 +49,24 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             _die2Result = _die2.Roll();
 
             var moveDistance = _die1Result + _die2Result;
+            RolledDoubles = _die1Result == _die2Result;
 
             // Don't set a new location if they're in jail
             if (IsInJail)
             {
-                var rolledDoubles = _die1Result == _die2Result;
-                // Rolling doubles when in jail gets the player out of jail
-                if (rolledDoubles)
+                if (!RolledDoubles)
                 {
-                    RolledDoubles = true;
-                }
-                else
-                {
-                    // However if they fail do this thrice, they have no choice 
+                    // If they fail to roll doubles thrice, they have no choice 
                     // but to pay the fine or use a get out of jail free card
                     RollDoublesFailureCount++;
                 }
 
                 return;
+            }
+
+            if (RolledDoubles)
+            {
+                RolledDoublesCount++;
             }
 
             SetLocation(GetLocation() + moveDistance);
@@ -80,7 +81,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             var goToJailProperty = Board.Access().GetProperty(goToJailLocation);
             var currentLocation = Board.Access().GetProperty(_location);
 
-            var isCriminal = currentLocation.Equals(goToJailProperty);
+            var isCriminal = currentLocation.Equals(goToJailProperty) || (RolledDoublesCount > 2);
 
             if (isCriminal) GoToJail();
 
