@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
-using IT7302_MonopolyProject_21102588_JoshuaCandish;
-using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 using NUnit.Framework;
 
-namespace Tests
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 {
     [TestFixture]
     public class TraderTests

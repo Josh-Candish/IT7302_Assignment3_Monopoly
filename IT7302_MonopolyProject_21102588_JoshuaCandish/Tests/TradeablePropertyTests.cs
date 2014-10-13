@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IT7302_MonopolyProject_21102588_JoshuaCandish;
 using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 using NUnit.Framework;
 
-namespace Tests
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 {
     [TestFixture]
     public class TradeablePropertyTests
@@ -81,7 +77,7 @@ namespace Tests
 
             var expectedReturnString =
                 string.Format(
-                    "Milford landed on Test Residential\nRent has been paid for Test Residential of ${0} to Josh",
+                    "Milford landed on Test Residential.\nRent has been paid for Test Residential of ${0} to Josh",
                     _tradeableProperty.GetRent());
 
             Assert.AreEqual(expectedReturnString, returnedString);

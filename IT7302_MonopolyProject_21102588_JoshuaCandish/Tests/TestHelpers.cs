@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IT7302_MonopolyProject_21102588_JoshuaCandish;
 using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 
-namespace Tests
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 {
     public class TestHelpers
     {

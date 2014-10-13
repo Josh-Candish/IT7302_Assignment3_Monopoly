@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IT7302_MonopolyProject_21102588_JoshuaCandish;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace Tests
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 {
     [TestFixture]
     public class PropertyTests

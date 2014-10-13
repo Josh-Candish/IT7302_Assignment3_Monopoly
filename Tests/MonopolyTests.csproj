@@ -40,19 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DieTests.cs" />
-    <Compile Include="MonopolyTests.cs" />
-    <Compile Include="PlayerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyTests.cs" />
-    <Compile Include="ResidentialTests.cs" />
-    <Compile Include="TestHelpers.cs" />
-    <Compile Include="TradeablePropertyTests.cs" />
-    <Compile Include="TraderTests.cs" />
-    <Compile Include="BankerTests.cs" />
-    <Compile Include="BoardTests.cs" />
-    <Compile Include="FactoriesTests.cs" />
-    <Compile Include="UtilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IT7302_MonopolyProject_21102588_JoshuaCandish\Monopoly.csproj">

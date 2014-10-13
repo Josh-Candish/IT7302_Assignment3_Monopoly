@@ -1,8 +1,6 @@
-using System;
-using IT7302_MonopolyProject_21102588_JoshuaCandish;
 using NUnit.Framework;
 
-namespace Tests
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 {
    
     /// <summary>
