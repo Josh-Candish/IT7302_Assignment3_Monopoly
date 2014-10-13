@@ -22,72 +22,97 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public override void MakePlay(int iPlayerIndex)
         {
-            //make variable for player
-            Player player = Board.Access().GetPlayer(iPlayerIndex);
-            //Change the colour for the player
-            Console.ForegroundColor = this._colors[iPlayerIndex];
-
-            //if inactive skip turn
-            if (!player.IsActive())
+            while (true)
             {
-                Console.WriteLine("\n{0} is inactive.\n", player.GetName());
-                //check players to continue
-                //check that there are still two players to continue
-                int activePlayerCount = 0;
-                foreach (Player p in Board.Access().GetPlayers())
+                //make variable for player
+                Player player = Board.Access().GetPlayer(iPlayerIndex);
+                //Change the colour for the player
+                Console.ForegroundColor = this._colors[iPlayerIndex];
+
+                //if inactive skip turn
+                if (!player.IsActive())
                 {
-                    //if player is active
-                    if (p.IsActive())
-                        //increment activePlayerCount
-                        activePlayerCount++;
+                    Console.WriteLine("\n{0} is inactive.\n", player.GetName());
+                    //check players to continue
+                    //check that there are still two players to continue
+                    int activePlayerCount = 0;
+                    foreach (Player p in Board.Access().GetPlayers())
+                    {
+                        //if player is active
+                        if (p.IsActive())
+                            //increment activePlayerCount
+                            activePlayerCount++;
+                    }
+
+                    //if less than two active players display winner
+                    if (activePlayerCount < 2)
+                    {
+                        this.PrintWinner();
+                    }
+
+                    return;
                 }
 
-                //if less than two active players display winner
-                if (activePlayerCount < 2)
+                //prompt player to make move
+                Console.WriteLine("{0}Your turn. Press Enter to make move", PlayerPrompt(iPlayerIndex));
+                Console.ReadLine();
+                //move player
+                player.Move();
+
+                if (player.IsInJail && player.RolledDoubles && (player.RollDoublesFailureCount < 3))
                 {
-                    this.PrintWinner();
+                    player.SetFreeFromJail();
+                    Console.WriteLine("You rolled doubles! You are out of Jail.");
                 }
-               
-                return;
+
+                if (player.IsInJail && player.RollDoublesFailureCount == 3)
+                {
+                    Console.WriteLine("You've failed to roll doubles three times while in Jail and must now settle it.");
+                    GetOutOfJail(player, true);
+                }
+
+                //Display making move
+                Console.WriteLine("*****Move for {0}:*****", player.GetName());
+                //Display rolling
+                Console.WriteLine("{0}{1}\n", PlayerPrompt(iPlayerIndex), player.DiceRollingToString());
+
+                Property propertyLandedOn = Board.Access().GetProperty(player.GetLocation());
+                //landon property and output to console
+                Console.WriteLine(propertyLandedOn.LandOn(ref player));
+                //Display player details
+                Console.WriteLine("\n{0}{1}", PlayerPrompt(iPlayerIndex), player.BriefDetailToString());
+
+                if (player.IsCriminal())
+                {
+                    Console.WriteLine("You are a criminal, go to Jail and lose your turn.");
+                    // Need to reset this here so when they come to get out of jail they aren't seen as a ciminal again
+                    // Thrice in a row means jail!
+                    if (player.RolledDoublesCount > 2)
+                    {
+                        Console.WriteLine("This is because you rolled doubles thrice in a row.");
+                    }
+
+                    // Reset the count as they've been sent to jail
+                    player.RolledDoublesCount = 0;
+                    return;
+                }
+
+                //display player choice menu
+                DisplayPlayerChoiceMenu(player);
+
+                // Player's get another turn when they roll doubles
+                if (player.RolledDoubles && !player.IsInJail)
+                {
+
+
+                    Console.WriteLine("You rolled doubles and get another turn");
+                    continue;
+                }
+
+                // When turn ends reset their rolled doubles count
+                player.RolledDoublesCount = 0;
+                break;
             }
-
-            //prompt player to make move
-            Console.WriteLine("{0}Your turn. Press Enter to make move", PlayerPrompt(iPlayerIndex));
-            Console.ReadLine();
-            //move player
-            player.Move();
-
-            if (player.IsInJail && player.RolledDoubles && (player.RollDoublesFailureCount < 3))
-            {
-                player.SetFreeFromJail();
-                Console.WriteLine("You rolled doubles! You are out of Jail.");
-            }
-
-            if (player.IsInJail && player.RollDoublesFailureCount == 3)
-            {
-                Console.WriteLine("You've failed to roll doubles three times while in Jail and must now settle it.");
-                GetOutOfJail(player, true);            
-            }
-
-            //Display making move
-            Console.WriteLine("*****Move for {0}:*****", player.GetName());
-            //Display rolling
-            Console.WriteLine("{0}{1}\n", PlayerPrompt(iPlayerIndex), player.DiceRollingToString());
-
-            Property propertyLandedOn = Board.Access().GetProperty(player.GetLocation());
-            //landon property and output to console
-            Console.WriteLine(propertyLandedOn.LandOn(ref player));
-            //Display player details
-            Console.WriteLine("\n{0}{1}", PlayerPrompt(iPlayerIndex), player.BriefDetailToString());
-
-            if (player.IsCriminal())
-            {
-                Console.WriteLine("You landed on Go To Jail, you are now in Jail and lose your turn.");
-                return;
-            }
-
-            //display player choice menu
-            DisplayPlayerChoiceMenu(player);
         }
 
         public override bool EndOfGame()
@@ -452,7 +477,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
             else //else display msg 
             {
-                Console.WriteLine("{0}A house can no be bought for {1} because it is not a Residential Property.", this.PlayerPrompt(player), propertyToBuyFor.GetName());
+                Console.WriteLine("{0}A house can no be bought for {1} because it is not a Residential Property.", this.PlayerPrompt(player), property.GetName());
                 return;
             }
             
