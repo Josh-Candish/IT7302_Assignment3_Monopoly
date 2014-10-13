@@ -26,7 +26,7 @@
 
         public virtual string LandOn(ref Player player)
         {
-            return string.Format("{0} landed on {1}", player.GetName(), GetName());
+            return string.Format("{0} landed on {1}.", player.GetName(), GetName());
         }
 
         public override string ToString()
