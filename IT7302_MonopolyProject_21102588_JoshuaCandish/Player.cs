@@ -15,6 +15,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public int RollDoublesFailureCount;
         public int RolledDoublesCount;
         public bool RolledDoubles;
+        public int GetOutOfJailCardCount;
 
         public bool IsInJail { get; set; }
 
@@ -89,7 +90,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             return isCriminal;
         }
 
-        private void GoToJail()
+        public void GoToJail()
         {
             SetLocation(10);// Jail's location on the board
             IsInJail = true;

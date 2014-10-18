@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
@@ -8,6 +10,9 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         private static Board _board;
         private ArrayList Properties;
         private ArrayList Players;
+        private ArrayList CommunityChestCards;
+        private ArrayList ChanceCards;
+        private int CardAmount = 16;
         private int Squares = 40;
         private bool _gameOver;
 
@@ -21,6 +26,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         {
             Properties = new ArrayList(GetSquares());
             Players = new ArrayList();
+            CommunityChestCards = new ArrayList(CardAmount);
+            ChanceCards = new ArrayList(CardAmount);
         }
 
         public void AddPlayer(Player player)
@@ -31,6 +38,16 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public void AddProperty(Property property)
         {
             Properties.Add(property);
+        }
+
+        public void AddChanceCard(Luck chanceCard)
+        {
+            ChanceCards.Add(chanceCard);
+        }
+
+        public void AddCommunityChestCard(Luck communityChestCard)
+        {
+            CommunityChestCards.Add(communityChestCard);
         }
 
         #region Getters/Setters
@@ -55,6 +72,84 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             return Players;
         }
 
+        public ArrayList GetChanceCards()
+        {
+            return ChanceCards;
+        }
+
+        public ArrayList GetCommunityChestCards()
+        {
+            return CommunityChestCards;
+        }
+
+        public Luck GetChanceCard()
+        {
+            var random = new Random();
+            Luck cardToReturn = null;
+            var cardFoundAtIndex = false;
+
+            if (ChanceCards.Count > 0)
+            {
+                while (!cardFoundAtIndex)
+                {
+                    try
+                    {
+                        // Get a random card
+                        var randomCard = random.Next(0, 15);
+                        cardToReturn = (Luck) ChanceCards[randomCard];
+
+                        // Remove the card from the deck
+                        ChanceCards.Remove(cardToReturn);
+                        cardFoundAtIndex = true;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        // If an error was thrown it's because the index from the
+                        // random number doesn't exist anymore, so a card wasn't found
+                        // and we need to try again (there is a card left
+                        // in the collection otherwise we wouldn't be in this codeblock)
+                        cardFoundAtIndex = false;
+                    }
+                }
+            }
+
+            return cardToReturn;
+        }
+
+        public Luck GetCommunityChestCard()
+        {
+            var random = new Random();
+            Luck cardToReturn = null;
+            var cardFoundAtIndex = false;
+
+            if (CommunityChestCards.Count > 0)
+            {
+                while (!cardFoundAtIndex)
+                {
+                    try
+                    {
+                        // Get a random card
+                        var randomCard = random.Next(0, 15);
+                        cardToReturn = (Luck)CommunityChestCards[randomCard];
+
+                        // Remove the card from the deck
+                        CommunityChestCards.Remove(cardToReturn);
+                        cardFoundAtIndex = true;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        // If an error was thrown it's because the index from the
+                        // random number doesn't exist anymore, so a card wasn't found
+                        // and we need to try again (there is a card left
+                        // in the collection otherwise we wouldn't be in this codeblock)
+                        cardFoundAtIndex = false;
+                    }
+                }
+            }
+
+            return cardToReturn;
+        }
+
         public Player GetPlayer(int playerIndex)
         {
             return (Player)Players[playerIndex];
@@ -62,15 +157,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public Player GetPlayer(string name)
         {
-            foreach (Player player in Players)
-            {
-                if (player.GetName() == name)
-                {
-                    return player;
-                }
-            }
-
-            return null;
+            return Players.Cast<Player>().FirstOrDefault(player => player.GetName() == name);
         }
 
         public int GetPlayerCount()

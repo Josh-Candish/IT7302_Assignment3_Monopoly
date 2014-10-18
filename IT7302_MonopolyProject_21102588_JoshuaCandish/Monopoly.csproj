@@ -65,6 +65,7 @@
     <Compile Include="Tests\BoardTests.cs" />
     <Compile Include="Tests\DieTests.cs" />
     <Compile Include="Tests\FactoriesTests.cs" />
+    <Compile Include="Tests\LuckTests.cs" />
     <Compile Include="Tests\MonopolyTests.cs" />
     <Compile Include="Tests\PlayerTests.cs" />
     <Compile Include="Tests\PropertyTests.cs" />

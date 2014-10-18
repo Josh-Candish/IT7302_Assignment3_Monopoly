@@ -11,8 +11,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
     
     public class Monopoly : Game
     {
-        readonly ConsoleColor[] _colors = new ConsoleColor[8] { ConsoleColor.Cyan, ConsoleColor.Green, ConsoleColor.Yellow, ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Gray, ConsoleColor.Blue, ConsoleColor.DarkYellow};
-        bool _gameSetUp;
+        private readonly ConsoleColor[] _colors = new ConsoleColor[8] { ConsoleColor.Cyan, ConsoleColor.Green, ConsoleColor.Yellow, ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Gray, ConsoleColor.Blue, ConsoleColor.DarkYellow};
+        private bool _gameSetUp;
 
         public override void InitialiseGame()
         {
@@ -77,8 +77,9 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 Console.WriteLine("{0}{1}\n", PlayerPrompt(iPlayerIndex), player.DiceRollingToString());
 
                 Property propertyLandedOn = Board.Access().GetProperty(player.GetLocation());
-                //landon property and output to console
-                Console.WriteLine(propertyLandedOn.LandOn(ref player));
+
+                HandleLanding(propertyLandedOn, player);
+                
                 //Display player details
                 Console.WriteLine("\n{0}{1}", PlayerPrompt(iPlayerIndex), player.BriefDetailToString());
 
@@ -112,6 +113,30 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 // When turn ends reset their rolled doubles count
                 player.RolledDoublesCount = 0;
                 break;
+            }
+        }
+
+        private void HandleLanding(Property propertyLandedOn , Player player)
+        {
+            // When landing on chance or community chest we need the behavour to be
+            // slightly different, i.e. get a card and display what the card is
+            if (propertyLandedOn.GetName().Contains("Chance") && (Board.Access().GetChanceCards().Count > 0))
+            {
+                Console.WriteLine(Board.Access().GetChanceCard().LandOn(ref player));
+            }
+            else if (propertyLandedOn.GetName().Contains("Community Chest") && (Board.Access().GetCommunityChestCards().Count > 0))
+            {
+                Console.WriteLine(Board.Access().GetCommunityChestCard().LandOn(ref player));
+            }
+            else
+            {
+                // Landon property and output to console
+                // In the case that they've landed on a chance or community chest but there 
+                // aren't any cards left we must make them aware of this.
+                var isChance = propertyLandedOn.GetName().Contains("Chance");
+                var isCommunityChest = propertyLandedOn.GetName().Contains("Community Chest");
+                Console.WriteLine("{0}{1}", propertyLandedOn.LandOn(ref player),
+                    isChance ? " No more Chance cards." : isCommunityChest ? " No more Community Chest cards." : "");
             }
         }
 
@@ -191,11 +216,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public void SetUpGame()
         {
             //setup properties
-            this.SetUpProperties();
-
+            SetUpProperties();
             //add players
-            this.SetUpPlayers();
-            
+            SetUpPlayers();
+            //add community and chance cards
+            SetUpCards();
         }
 
         public void PlayGame()
@@ -255,11 +280,12 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void SetUpProperties()
         {
-            var luckFactory = new LuckFactory();
             var resFactory = new ResidentialFactory();
             var transFactory = new TransportFactory();
             var utilFactory = new UtilityFactory();
             var genericFactory = new PropertyFactory();
+            var luckFactory = new LuckFactory();
+
 
             try
             {
@@ -341,6 +367,32 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
 
             Console.WriteLine("Players have been setup");
+        }
+
+        public void SetUpCards()
+        {
+            try
+            {
+                var fileReader = new FileReader();
+                var cards = fileReader.ReadCardDetailsFromCSV();
+
+                foreach (var card in cards)
+                {
+                    if (card.GetName().Contains("Chance"))
+                    {
+                        Board.Access().AddChanceCard(card);
+                    }
+
+                    if (card.GetName().Contains("Community Chest"))
+                    {
+                        Board.Access().AddCommunityChestCard(card);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Oops, something went wrong setting up the cards: {0}", ex.Message);
+            }
         }
 
         public string PlayerPrompt(int playerIndex)
@@ -652,6 +704,15 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         : "You have insufficient funds and are still in jail");
                     break;
                 case 2:
+                    if (player.GetOutOfJailCardCount > 0)
+                    {
+                        player.SetFreeFromJail();
+                        player.GetOutOfJailCardCount--;
+                        Console.WriteLine("You are now free from jail.");
+                        break;
+                    }
+                    Console.WriteLine("You don't have any Get out of Jail free cards.");
+                    if (mustSettle) GetOutOfJail(player, true);
                     break;
                 case 3:
                     break;

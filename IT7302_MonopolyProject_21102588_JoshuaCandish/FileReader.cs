@@ -1,13 +1,16 @@
-﻿using System;
+﻿using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
     public class FileReader
     {
+        /// <summary>
+        /// Reads property details about each property from a csv
+        /// </summary>
+        /// <returns>A list of PropertyDetails objects, each representing a specific property to be added to the board</returns>
         public List<PropertyDetails> ReadPropertyDetailsFromCSV()
         {
             try
@@ -40,10 +43,41 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
                 return propertyDetailsFromCSV;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Something went wrong importing the property details file.");
-                return null;
+                throw new ApplicationException(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Reads the details for chance and community chest cards from a csv file
+        /// </summary>
+        /// <returns>A list of Luck objects that represent each card</returns>
+        public List<Luck> ReadCardDetailsFromCSV()
+        {
+            try
+            {
+                var luckFactory = new LuckFactory();
+                var reader = new StreamReader(File.OpenRead("carddetails.csv"));
+                var cardDetailsFromCSV = new List<Luck>();
+
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    if (line.Contains("Name")) continue; // Ignore the column headings
+
+                    var values = line.Split(',');
+
+                    var card = luckFactory.create(values[0], Convert.ToBoolean(values[1]), Convert.ToDecimal(values[2]));
+
+                    cardDetailsFromCSV.Add(card);
+                }
+
+                return cardDetailsFromCSV;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message);
             }
         }
     }
