@@ -16,6 +16,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 
             _gameOfMonopoly = new Monopoly();
             _gameOfMonopoly.SetUpProperties();
+            _gameOfMonopoly.SetUpCards();
 
             _player1 = new Player("Josh");
             _player2 = new Player("Hubert");
@@ -110,6 +111,33 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             // Check logs correct output to console
             Monopoly.playerBankruptHandler(_player1, EventArgs.Empty);
             Monopoly.playerPassGoHandler(_player1, EventArgs.Empty);
+        }
+
+        [Test]
+        public void board_has_32_chance_community_cards()
+        {
+            const int expected = 32;
+            var actual = Board.Access().GetChanceCards().Count + Board.Access().GetCommunityChestCards().Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void board_has_16_community_cards()
+        {
+            const int expected = 16;
+            var actual = Board.Access().GetCommunityChestCards().Count;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void board_has_16_chance_cards()
+        {
+            const int expected = 16;
+            var actual = Board.Access().GetChanceCards().Count;
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }
