@@ -1,4 +1,6 @@
-﻿using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
+﻿using System.Collections.Generic;
+using System.Linq;
+using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 using NUnit.Framework;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
@@ -218,6 +220,45 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             var locationAfterMove = _emptyPlayer.GetLocation();
 
             Assert.AreEqual(locationBeforeMove, locationAfterMove);
+        }
+
+        [Test]
+        public void when_player_doesnt_own_all_properties_of_colour()
+        {
+            FreshBoard();
+
+            // Get all the residential properties on the board
+            var residentialProperties =
+                Board.Access()
+                    .GetProperties()
+                    .Cast<object>()
+                    .Where(property => property.GetType() == typeof (Residential))
+                    .Cast<Residential>()
+                    .ToList();
+
+            // Get the first one's colour
+            var randomResidentialColour = residentialProperties.First().GetHouseColour();
+
+            // Shouldn't own all of the properties of that colour
+            Assert.IsFalse(_emptyPlayer.OwnsAllHousesOfColour(randomResidentialColour));
+        }
+
+        [Test]
+        public void when_player_owns_all_properties_of_colour()
+        {
+            FreshBoard();
+            const string colour = "Red";
+            // Get all the red properties on the board
+            var redProperties = Board.Access().GetAllPropertiesOfColour(colour);
+
+            // Set the player to be the owner of them
+            foreach (var property in redProperties)
+            {
+                property.SetOwner(ref _emptyPlayer);
+            }
+
+            // Should now be the owner of all of those properties
+            Assert.IsTrue(_emptyPlayer.OwnsAllHousesOfColour(colour));
         }
 
         #region Helpers

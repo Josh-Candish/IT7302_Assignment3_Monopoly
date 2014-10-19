@@ -175,6 +175,14 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             _gameOver = gameOver;
         }
 
+        public List<Residential> GetAllPropertiesOfColour(string houseColour)
+        {
+            return GetProperties()
+                .OfType<Residential>() // Only residential properties have a colour
+                .Where(property => property.GetHouseColour() == houseColour)
+                .ToList();
+        }
+
         /// <summary>
         /// VIOLATES SINGLETON PATTERN ***DO NOT USE, EXCEPT FOR TESTS***
         /// </summary>

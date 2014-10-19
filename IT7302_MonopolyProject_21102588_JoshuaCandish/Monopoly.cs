@@ -305,7 +305,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         case "residential":
                             Board.Access()
                                 .AddProperty(resFactory.create(propertyDetail.Name, propertyDetail.Price,
-                                    propertyDetail.Rent, propertyDetail.HouseCost));
+                                    propertyDetail.Rent, propertyDetail.HouseCost, propertyDetail.HouseColour));
                             break;
                         case "transport":
                             Board.Access().AddProperty(transFactory.create(propertyDetail.Name));

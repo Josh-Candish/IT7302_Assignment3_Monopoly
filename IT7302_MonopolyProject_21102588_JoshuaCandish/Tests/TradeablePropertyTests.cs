@@ -15,7 +15,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
         public void BeforeAll()
         {
             var residentialFactory = new ResidentialFactory();
-            _tradeableProperty = residentialFactory.create("Test Residential", 200, 50, 50);
+            _tradeableProperty = residentialFactory.create("Test Residential", 200, 50, 50,"Red");
             _player = new Player("Josh", 500);
             _banker = Banker.Access();
         }

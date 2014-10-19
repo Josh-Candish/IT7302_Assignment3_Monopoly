@@ -69,7 +69,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             //create instance of factory
             ResidentialFactory f = new ResidentialFactory();
             //create instance from factory
-            Residential p = f.create("Residential", 50, 50, 50);
+            Residential p = f.create("Residential", 50, 50, 50, "Red");
             //check that it is right type
             Type t = new Residential().GetType();
             Assert.IsInstanceOfType(t, p);
