@@ -12,7 +12,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
         public void BeforeAll()
         {
             var residentialFactory = new ResidentialFactory();
-            _residentialProperty = residentialFactory.create("Cape Reinga Lighthouse", 140, 14, 100);
+            _residentialProperty = residentialFactory.create("Cape Reinga Lighthouse", 140, 14, 100, "Red");
             _residentialProperty.GetHouseCost();
 
             // Add one house to the property

@@ -36,6 +36,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                     if (!string.IsNullOrEmpty(values[4])) propertyDetailsRow.HouseCost = Convert.ToDecimal(values[4]);
                     if (!string.IsNullOrEmpty(values[5])) propertyDetailsRow.IsPenalty = Convert.ToBoolean(values[5]);
                     if (!string.IsNullOrEmpty(values[6])) propertyDetailsRow.Amount = Convert.ToDecimal(values[6]);
+                    if (!string.IsNullOrEmpty(values[7])) propertyDetailsRow.HouseColour = values[7];
 
                     propertyDetailsFromCSV.Add(propertyDetailsRow);
 

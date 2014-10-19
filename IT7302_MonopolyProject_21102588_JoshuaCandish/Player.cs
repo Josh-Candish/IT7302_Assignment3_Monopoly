@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
@@ -185,6 +186,15 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         {
             IsInJail = false;
             RollDoublesFailureCount = 0;
+        }
+
+        public bool OwnsAllHousesOfColour(string houseColour)
+        {
+            // Get all properties of the supplied colour
+            var propertiesOfColour = Board.Access().GetAllPropertiesOfColour(houseColour);
+
+            // Return whether or not this player is the owner of every one of those properties
+            return propertiesOfColour.All(x => x.GetOwner() == this);
         }
 
         #region Getters/Setters

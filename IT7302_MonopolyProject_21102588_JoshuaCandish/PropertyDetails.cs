@@ -16,5 +16,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public bool IsPenalty { get; set; }
 
         public decimal Amount { get; set; }
+
+        public string HouseColour { get; set; }
     }
 }
