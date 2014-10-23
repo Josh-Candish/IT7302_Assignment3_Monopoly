@@ -116,6 +116,10 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         private void HandleLanding(Property propertyLandedOn , Player player)
         {
+            // If it's a residential property we need to parse it so we can get the colour and display it to the user
+            // otherwise they won't be aware of colour the property is at any point.
+            var propertyAsRes = propertyLandedOn.GetType() == typeof (Residential) ? (Residential) propertyLandedOn : null;
+           
             // When landing on chance or community chest we need the behavour to be
             // slightly different, i.e. get a card and display what the card is
             if (propertyLandedOn.GetName().Contains("Chance") && (Board.Access().GetChanceCards().Count > 0))
@@ -133,8 +137,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 // aren't any cards left we must make them aware of this.
                 var isChance = propertyLandedOn.GetName().Contains("Chance");
                 var isCommunityChest = propertyLandedOn.GetName().Contains("Community Chest");
-                Console.WriteLine("{0}{1}", propertyLandedOn.LandOn(ref player),
-                    isChance ? " No more Chance cards." : isCommunityChest ? " No more Community Chest cards." : "");
+
+                Console.WriteLine("{0}{1}{2}",
+                    propertyLandedOn.LandOn(ref player),/*{0}*/
+                    isChance ? " No more Chance cards." : isCommunityChest ? " No more Community Chest cards." : "",/*{1}*/
+                    propertyAsRes != null ? " (Colour: " + propertyAsRes.GetHouseColour() + ")" : "");/*{2}*/
             }
         }
 
