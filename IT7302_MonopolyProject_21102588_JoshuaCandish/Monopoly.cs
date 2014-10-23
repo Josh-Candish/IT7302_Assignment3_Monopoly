@@ -104,8 +104,6 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 // Player's get another turn when they roll doubles
                 if (player.RolledDoubles && !player.IsInJail)
                 {
-
-
                     Console.WriteLine("You rolled doubles and get another turn");
                     continue;
                 }
@@ -506,6 +504,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 Console.WriteLine("Sorry, you are in jail.");
                 return;
             }
+
             //create prompt
             string sPrompt = String.Format("{0}Please select a property to buy a house for:", this.PlayerPrompt(player));
             //create variable for propertyToBuy
@@ -533,21 +532,38 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 return;
             }
             
-            //check that max houses has not been reached
-            if (propertyToBuyFor.GetHouseCount() >= Residential.GetMaxHouses())
+            // Player must own all the propeties in the colour group
+            if (!player.OwnsAllPropertiesOfColour(propertyToBuyFor.GetHouseColour()))
             {
-                Console.WriteLine("{0}The maximum house limit for {1} of {2} houses has been reached.", PlayerPrompt(player), propertyToBuyFor.GetName(), Residential.GetMaxHouses());
+                Console.WriteLine(
+                    "You must own all the properties within this colour group ({0}) to buy houses for this property.",
+                    propertyToBuyFor.GetHouseColour());
+                return;
+            }
+
+            // We've checked if they own the properties of the colour, now
+            // check if each property is equally developed
+            if (!player.CanDevelopPropertyFurther(propertyToBuyFor))
+            {
+                Console.WriteLine("Each property in this colour group needs to have houses uniformly added");
+            }
+            else if (propertyToBuyFor.HasHotel)// If it has a hotel they can't add more houses.
+            {
+                Console.WriteLine("This property has a hotel and can not be developed further.");
             }
             else
             {
                 //confirm
-                bool doBuyHouse = this.GetInputYn(player, String.Format("You chose to buy a house for {0}. Are you sure you want to purchase a house for ${1}?", propertyToBuyFor.GetName(), propertyToBuyFor.GetHouseCost()));
+                var doBuyHouse = GetInputYn(player,string.Format("You chose to buy a house for {0}. Are you sure you want to purchase a house for ${1}?",
+                                    propertyToBuyFor.GetName(), propertyToBuyFor.GetHouseCost()));
+
                 //if confirmed
                 if (doBuyHouse)
                 {
                     //buy the house
                     propertyToBuyFor.AddHouse();
-                    Console.WriteLine("{0}A new house for {1} has been bought successfully", PlayerPrompt(player), propertyToBuyFor.GetName());
+                    Console.WriteLine("{0}A new house for {1} has been bought successfully", PlayerPrompt(player),
+                        propertyToBuyFor.GetName());
                 }
             }
         }

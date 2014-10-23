@@ -188,13 +188,34 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             RollDoublesFailureCount = 0;
         }
 
-        public bool OwnsAllHousesOfColour(string houseColour)
+        public bool OwnsAllPropertiesOfColour(string houseColour)
         {
             // Get all properties of the supplied colour
             var propertiesOfColour = Board.Access().GetAllPropertiesOfColour(houseColour);
 
             // Return whether or not this player is the owner of every one of those properties
             return propertiesOfColour.All(x => x.GetOwner() == this);
+        }
+
+        public bool CanDevelopPropertyFurther(Residential propertyToBuyHouseFor)
+        {
+            var propertiesOfColour = Board.Access().GetAllPropertiesOfColour(propertyToBuyHouseFor.GetHouseColour());
+            var propertiesExcludingDevelopee = propertiesOfColour.Where(property => property != propertyToBuyHouseFor);
+
+            /***
+             * In order to build a house on a property, the player must build houses 
+             * uniformly across the properties of a colour. That means the player can't 
+             * build a second house on a property of a colour until all properties of
+             * that colour have one house.
+             * So each property (excluding the one in question) should have the same amount 
+             * of houses as the one in question. Minus one for the case where a property in the
+             * colour group might have 1 house and the one in question has 0, they aren't equal
+             * so we need to minus 1 from the property that has a house.
+             * */
+            return propertiesExcludingDevelopee
+                .All(property =>
+                    property.GetHouseCount() == (propertyToBuyHouseFor.GetHouseCount()) ||
+                    property.GetHouseCount() - 1 == (propertyToBuyHouseFor.GetHouseCount()));
         }
 
         #region Getters/Setters

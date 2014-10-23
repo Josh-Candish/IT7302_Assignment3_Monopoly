@@ -240,7 +240,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             var randomResidentialColour = residentialProperties.First().GetHouseColour();
 
             // Shouldn't own all of the properties of that colour
-            Assert.IsFalse(_emptyPlayer.OwnsAllHousesOfColour(randomResidentialColour));
+            Assert.IsFalse(_emptyPlayer.OwnsAllPropertiesOfColour(randomResidentialColour));
         }
 
         [Test]
@@ -258,7 +258,36 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             }
 
             // Should now be the owner of all of those properties
-            Assert.IsTrue(_emptyPlayer.OwnsAllHousesOfColour(colour));
+            Assert.IsTrue(_emptyPlayer.OwnsAllPropertiesOfColour(colour));
+        }
+
+        [Test]
+        public void attempt_property_development()
+        {
+            FreshBoard();
+            var blueProperties = Board.Access().GetAllPropertiesOfColour("Blue");
+
+            foreach (var blueProperty in blueProperties)
+            {
+                blueProperty.SetOwner(ref _emptyPlayer);
+            }
+
+            // Just get a random one of those properties
+            var randomBlueProperty = blueProperties.First();
+
+            // Add a house to that property
+            randomBlueProperty.AddHouse();
+
+            // Now that property shouldn't be allowed to be developed anymore because 
+            // the other properties in this colour group don't have one house as well
+            Assert.IsFalse(_emptyPlayer.CanDevelopPropertyFurther(randomBlueProperty));
+
+            // Get another property
+            var anotherRandomBlueProperty = blueProperties.Last();
+
+            // This property should be okay to develop to bring it to the same development
+            // of the previous property
+            Assert.IsTrue(_emptyPlayer.CanDevelopPropertyFurther(anotherRandomBlueProperty));
         }
 
         #region Helpers
