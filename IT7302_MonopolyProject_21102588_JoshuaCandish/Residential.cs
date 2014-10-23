@@ -1,4 +1,6 @@
-﻿namespace IT7302_MonopolyProject_21102588_JoshuaCandish
+﻿using System.Linq;
+
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
     public class Residential : TradeableProperty
     {
@@ -6,7 +8,6 @@
         private int HouseCount;
         private const int MaxHouses = 4;
         private string HouseColour;
-        private bool HasHotel;
 
         public Residential() : this ("Residential Property") {}
 
@@ -24,13 +25,29 @@
 
         public override decimal GetRent()
         {
-            return Rent + (Rent * HouseCount);
+            // This is the rent value for a property with a hotel
+            if (HasHotel) return Rent + (Rent*5);
+
+            // The rent is double if the owner owns all the properties of this colour and the property is undeveloped (exclude the banker)
+            if ((Board.Access().GetAllPropertiesOfColour(HouseColour).All(x => x.Owner == Owner && Owner != Banker.Access())) && (HouseCount == 0))
+            {
+                return Rent * 2;
+            }
+
+            // The rent multiplier is dependent on if the property
+            // is at the hotel stage or not yet
+            return Rent + (Rent*HouseCount);
         }
 
         public void AddHouse()
         {
             GetOwner().Pay(HouseCost);
             HouseCount++;
+
+            if (HouseCount > 4)
+            {
+                HasHotel = true;
+            }
         }
 
         public decimal GetHouseCost()
@@ -52,6 +69,8 @@
         {
             return HouseColour;
         }
+
+        public bool HasHotel { get; set; }
 
         public override string ToString()
         {
