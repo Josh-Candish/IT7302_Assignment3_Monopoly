@@ -1,4 +1,5 @@
-﻿using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
+﻿using System;
+using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 using NUnit.Framework;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
@@ -34,6 +35,16 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             var rentWithHouse = _residentialProperty.GetRent();
 
             Assert.AreEqual(rentPlusOneHouse, rentWithHouse);
+        }
+
+        [Test]
+        public void rent_for_mortgaged_property_is_zero()
+        {
+            _residentialProperty = NewResidential();
+            _residentialProperty.IsMortgaged = true;
+            var rentForMortgagedProperty = _residentialProperty.GetRent();
+
+            Assert.AreEqual(Decimal.Zero, rentForMortgagedProperty);
         }
 
         [Test]
@@ -119,6 +130,86 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             Assert.IsTrue(_residentialProperty.HasHotel);
         }
 
+        [Test]
+        public void mortgaged_property_cant_be_mortgaged_again()
+        {
+            _residentialProperty = NewResidential();
+
+            _residentialProperty.MortgageProperty();
+
+            // Should now be mortgaged after mortgaging
+            Assert.IsTrue(_residentialProperty.IsMortgaged);
+
+            // Trying to mortgage again should return false
+            Assert.IsFalse(_residentialProperty.MortgageProperty());
+        }
+
+        [Test]
+        public void developed_property_cant_be_mortgaged()
+        {
+            _residentialProperty = NewResidential();
+            _residentialProperty.AddHouse();
+
+            Assert.IsFalse(_residentialProperty.MortgageProperty());
+        }
+
+        [Test]
+        public void nonmortgaged_property_cant_be_unmortgaged()
+        {
+            _residentialProperty = NewResidential();
+
+            // Shouldn't be mortgaged
+            Assert.IsFalse(_residentialProperty.IsMortgaged);
+
+            // So we shouldn't be able to unmortgage it
+            Assert.IsFalse(_residentialProperty.UnmortgageProperty());
+        }
+
+        [Test]
+        public void mortgaging_property_results_in_correct_balance_alterations()
+        {
+            _residentialProperty = NewResidential();
+            var testPlayer = GetMeANewPlayer();
+            var mortgageValue = _residentialProperty.GetMortgageValue();
+            var ownerBalanceBefore = testPlayer.GetBalance();
+            var bankerBalanceBefore = Banker.Access().GetBalance();
+
+            _residentialProperty.SetOwner(ref testPlayer);
+
+            _residentialProperty.MortgageProperty();
+
+            // Property should now be mortgaged
+            Assert.IsTrue(_residentialProperty.IsMortgaged);
+
+            // The property's owner should have received the mortgage money
+            Assert.AreEqual(ownerBalanceBefore + mortgageValue, testPlayer.GetBalance());
+
+            // The banker should have paid the mortgage money
+            Assert.AreEqual(bankerBalanceBefore - mortgageValue, Banker.Access().GetBalance());
+        }
+
+        [Test]
+        public void unmortgaging_property_results_in_correct_balance_alterations()
+        {
+            _residentialProperty = NewResidential();
+            var testPlayer = GetMeANewPlayer();
+            var paybackValue = _residentialProperty.GetMortgageValue() + (_residentialProperty.GetMortgageValue() * 10 / 100);// mortgage plus 10%
+
+            _residentialProperty.SetOwner(ref testPlayer);
+            _residentialProperty.MortgageProperty();
+
+            var ownerBalaceBeforeUnmortgage = testPlayer.GetBalance();
+            var bankerBalanceBeforeUnmortgage = Banker.Access().GetBalance();
+
+            _residentialProperty.UnmortgageProperty();
+
+            // The property's owner should have paid the mortgage payback value
+            Assert.AreEqual(ownerBalaceBeforeUnmortgage - paybackValue, testPlayer.GetBalance());
+
+            // The banker should have received the mortgage payback value
+            Assert.AreEqual(bankerBalanceBeforeUnmortgage + paybackValue, Banker.Access().GetBalance());
+        }
+
         #region Helpers
 
         private Residential NewResidential()
@@ -126,6 +217,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             return _residentialFactory.create("Cape Reinga Lighthouse", 140, 14, 100, "Red");
         }
 
+        private static Player GetMeANewPlayer()
+        {
+            var player = new Player("TestPlayer");
+            return player;
+        }
         #endregion
     }
 }

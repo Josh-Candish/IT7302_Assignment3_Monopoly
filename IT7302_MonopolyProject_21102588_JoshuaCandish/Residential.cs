@@ -25,6 +25,9 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public override decimal GetRent()
         {
+            // Mortgaged properties cannot have rent collected on them
+            if (IsMortgaged) return 0;
+
             // This is the rent value for a property with a hotel
             if (HasHotel) return Rent + (Rent*5);
 
@@ -50,6 +53,32 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
         }
 
+        public bool MortgageProperty()
+        {
+            // Property must be undeveloped and can't
+            // already be mortagaged
+            if (GetHouseCount() != 0 || IsMortgaged) return false;
+
+            IsMortgaged = true;
+            Banker.Access().Pay(MortgageValue);
+            Owner.Receive(MortgageValue);
+
+            return true;
+        }
+
+        public bool UnmortgageProperty()
+        {
+            // Property must be mortgaged
+            if (!IsMortgaged) return false;
+
+            var mortgageValuePlus10PercentInterest = MortgageValue + (MortgageValue*10/100);
+            Owner.Pay(mortgageValuePlus10PercentInterest);
+            Banker.Access().Receive(mortgageValuePlus10PercentInterest);
+            IsMortgaged = false;
+
+            return true;
+        }
+
         public decimal GetHouseCost()
         {
             return HouseCost;
@@ -71,6 +100,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         }
 
         public bool HasHotel { get; set; }
+
+        public bool IsMortgaged { get; set; }
 
         public override string ToString()
         {
