@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
@@ -438,9 +439,10 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Console.WriteLine("3. Purchase This Property");
             Console.WriteLine("4. Buy House for Property");
             Console.WriteLine("5. Trade Property with Player");
-            if (player.IsInJail) Console.WriteLine("6. Get Out of Jail");
+            Console.WriteLine("6. Mortgage Options");
+            if (player.IsInJail) Console.WriteLine("7. Get Out of Jail");
 
-            Console.Write(player.IsInJail ? "(1-6)>" : "(1-5)>");
+            Console.Write(player.IsInJail ? "(1-7)>" : "(1-6)>");
             //read response
             resp = InputInteger();
             //if response is invalid redisplay menu
@@ -471,6 +473,10 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         DisplayPlayerChoiceMenu(player);
                         break;
                     case 6:
+                        MortgageOptions(player);
+                        DisplayPlayerChoiceMenu(player);
+                        break;
+                    case 7:
                         GetOutOfJail(player, false);
                         DisplayPlayerChoiceMenu(player);
                         break;
@@ -535,7 +541,13 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
             else //else display msg 
             {
-                Console.WriteLine("{0}A house can no be bought for {1} because it is not a Residential Property.", this.PlayerPrompt(player), property.GetName());
+                Console.WriteLine("{0}A house can not be bought for {1} because it is not a Residential Property.", this.PlayerPrompt(player), property.GetName());
+                return;
+            }
+
+            if (propertyToBuyFor.IsMortgaged)
+            {
+                Console.WriteLine("{0}A house can not be bought for {1} because it is currently mortgaged.", PlayerPrompt(player), property.GetName());
                 return;
             }
             
@@ -627,15 +639,34 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }     
         }
 
-        public Property DisplayPropertyChooser(ArrayList properties, String sPrompt)
+        public Property DisplayPropertyChooser(ArrayList properties, String sPrompt, bool forMortgages = false)
         {
             //if no properties return null
             if (properties.Count == 0)
                 return null;
             Console.WriteLine(sPrompt);
-            for (int i = 0; i < properties.Count; i++)
+
+            if (!forMortgages)
             {
-                Console.WriteLine("{0}. {1}", i + 1, properties[i].ToString());
+                for (var i = 0; i < properties.Count; i++)
+                {
+                    Console.WriteLine("{0}. {1}", i + 1, properties[i].ToString());
+                }
+            }
+            else
+            {
+                // We only want to show them residential properties if this is for mortgaging
+                // So get the residential props
+                var residentialProps = properties.ToArray().Where(property => property.GetType() == typeof (Residential)).ToArray();
+
+                // clear the propeties list and add only the residential properties to it
+                properties.Clear();
+                properties.AddRange(residentialProps);
+
+                for (var i = 0; i < properties.Count; i++)
+                {
+                    Console.WriteLine("{0}. {1}", i + 1, properties[i].ToString());
+                }
             }
             //display prompt
             Console.Write("({0}-{1})>", 1, properties.Count);
@@ -646,7 +677,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             if ((resp < 1) || (resp > properties.Count))
             {
                 Console.WriteLine("That option is not avaliable. Please try again.");
-                this.DisplayPropertyChooser(properties, sPrompt);
+                this.DisplayPropertyChooser(properties, sPrompt, forMortgages);
                 return null;
             }
             else
@@ -695,6 +726,66 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         return p;
                 }
                 return null;
+            }
+        }
+
+        public void MortgageOptions(Player player)
+        {
+            Console.WriteLine();
+            Console.WriteLine("1. Mortgage property");
+            Console.WriteLine("2. Pay mortgage on property");
+            Console.WriteLine("3. Back to Main Menu");
+            Console.Write("(1-3)>");
+
+            //read response
+            var resp = InputInteger();
+
+            Residential property;
+            switch (resp)
+            {
+                case 1:
+                    property =
+                        (Residential)
+                            DisplayPropertyChooser(player.GetPropertiesOwnedFromBoard(), "Property to mortgage: ", true);
+                    if (property == null)
+                    {
+                        Console.WriteLine("You don't own any properties!");
+                    }
+                    else if (property.MortgageProperty())
+                    {
+                        Console.WriteLine("Property has been mortgaged for {0}", property.GetMortgageValue());
+                    }
+                    else // If it wasn't mortgaged it must be developed or already be mortgaged
+                    {
+                        Console.WriteLine(
+                            "Property can't be mortgaged. Either it is already mortgaged or has been developed.");
+                    }
+                    break;
+                case 2:
+                    property =
+                        (Residential)
+                            DisplayPropertyChooser(player.GetPropertiesOwnedFromBoard(), "Property to unmortgage: ",
+                                true);
+
+                    if (property == null)
+                    {
+                        Console.WriteLine("You don't own any properties!");
+                    }
+                    else if (property.UnmortgageProperty())
+                    {
+                        Console.WriteLine("Mortgage has been paid for property {0}", property.GetName());
+                    }
+                    else // If it wasn't unmortgaged it's because it wasn't mortgaged in the first place
+                    {
+                        Console.WriteLine("Property must be mortgaged for you to pay the mortgage");
+                    }
+                    break;
+                case 3:
+                    break;
+                default:
+                    Console.WriteLine("That option is not avaliable. Please try again.");
+                    MortgageOptions(player);
+                    break;
             }
         }
 
