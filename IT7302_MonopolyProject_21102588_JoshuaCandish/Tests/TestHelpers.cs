@@ -14,7 +14,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             // The trader should be the banker as they own the property
             Trader trader = Banker.Access();
 
-            trader.TradeProperty(ref tradeableProperty, ref purchaser, tradeableProperty.GetPrice());
+            trader.TradeProperty(ref tradeableProperty, ref purchaser, tradeableProperty.GetPrice(), Decimal.Zero);
 
             return tradeableProperty;
         }

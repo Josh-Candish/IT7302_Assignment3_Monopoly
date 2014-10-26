@@ -49,11 +49,13 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             PropertiesOwned.Add(property);
         }
 
-        public void TradeProperty(ref TradeableProperty property, ref Player purchaser, decimal amount)
+        public void TradeProperty(ref TradeableProperty property, ref Player purchaser, decimal amount, decimal mortgageAmount)
         {
-            purchaser.Pay(amount);
+            // If the property isn't mortgaged the mortgage amount will just be 0
+            purchaser.Pay(amount + mortgageAmount);
             Receive(amount);
             property.SetOwner(ref purchaser);
+            Banker.Access().Receive(mortgageAmount);
         }
 
         #region Getters/Setters

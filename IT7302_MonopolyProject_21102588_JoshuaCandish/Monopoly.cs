@@ -620,16 +620,50 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             ConsoleColor origColor = Console.ForegroundColor;
             int i = Board.Access().GetPlayers().IndexOf(playerToTradeWith);
             Console.ForegroundColor = this._colors[i];
-                //get player response
-            bool agreesToTrade = GetInputYn(playerToTradeWith, string.Format("{0} wants to trade '{1}' with you for ${2}. Do you agree to pay {2} for '{1}'", player.GetName(), propertyToTrade.GetName(), amountWanted));
+
+            bool agreesToTrade;
+            var mortgageInterest = Decimal.Zero;
+
+            //get player response
+            /*We need to do this to check and find if the property is mortgaged 
+             and in the case that it is, notify the buyer that the price
+             of the property includes the original owner's mortgage interest*/
+            if (propertyToTrade.GetType() == typeof (Residential))
+            {
+                var residentialPropertyToTrade = (Residential) propertyToTrade;
+
+                if (residentialPropertyToTrade.IsMortgaged)
+                {
+                    mortgageInterest = residentialPropertyToTrade.GetMortgageValue()*10/100;
+
+                    agreesToTrade = GetInputYn(playerToTradeWith,
+                        string.Format(
+                            "{0} wants to trade '{1}' with you for ${2} (including seller's mortgage interest for this property). Do you agree to pay {2} for '{1}'",
+                            player.GetName(),/*{0}*/
+                            propertyToTrade.GetName(),/*{1}*/
+                            amountWanted + mortgageInterest));/*{2}*/
+                }
+                else // If it's not mortgaged do the normal trading behaviour
+                {
+                    agreesToTrade = GetInputYn(playerToTradeWith,
+                        string.Format("{0} wants to trade '{1}' with you for ${2}. Do you agree to pay {2} for '{1}'",
+                            player.GetName(), propertyToTrade.GetName(), amountWanted));
+                }
+            }
+            else 
+            {
+                agreesToTrade = GetInputYn(playerToTradeWith,
+                    string.Format("{0} wants to trade '{1}' with you for ${2}. Do you agree to pay {2} for '{1}'",
+                        player.GetName(), propertyToTrade.GetName(), amountWanted));
+            }
+
             //resent console color
             Console.ForegroundColor = origColor;
             if (agreesToTrade)
             {
                 Player playerFromBoard = Board.Access().GetPlayer(playerToTradeWith.GetName());
                 //player trades property
-
-                player.TradeProperty(ref propertyToTrade, ref playerFromBoard, amountWanted);
+                player.TradeProperty(ref propertyToTrade, ref playerFromBoard, amountWanted, mortgageInterest);
                 Console.WriteLine("{0} has been traded successfully. {0} is now owned by {1}", propertyToTrade.GetName(), playerFromBoard.GetName());
             }
             else
