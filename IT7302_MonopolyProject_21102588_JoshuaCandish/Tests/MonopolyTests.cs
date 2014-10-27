@@ -149,11 +149,17 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 
             _gameOfMonopoly.SetUpProperties();
             Board.Access().AddPlayer(new Player());
+            Board.Access().AddPlayer(new Player());
             _gameOfMonopoly.SaveGame();
 
             _gameOfMonopoly.LoadGame();
 
             Assert.AreEqual(40, Board.Access().GetProperties().Count);
+
+            // Need to reset the the save file to a blank board
+            // for when actually playing the game
+            Board.Access().ResetBoard();
+            _gameOfMonopoly.SaveGame();
         }
     }
 }

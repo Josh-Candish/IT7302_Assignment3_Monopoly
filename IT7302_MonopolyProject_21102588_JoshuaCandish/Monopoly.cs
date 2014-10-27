@@ -854,7 +854,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
             // The board will be null if the file doesn't exist so we need to cover that case
             // and we need to make sure the board has players otherwise it's an empty board
-            if (board != null && board.GetPlayerCount() > 0)
+            if (board != null && board.GetPlayerCount() >= 2)
             {
                 // Set the current board to be the the board instance loaded from the bin file
                 Board.Access().SetBoardFromLoadedBoard(board);
