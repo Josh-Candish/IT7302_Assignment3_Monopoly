@@ -1,4 +1,5 @@
-﻿using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
+﻿using System.Runtime.Serialization.Formatters.Binary;
+using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -80,6 +81,26 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             {
                 throw new ApplicationException(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Loads a saved instance of Board from the SavedBoard.bin file
+        /// </summary>
+        /// <returns>The board instance</returns>
+        public Board ReadBoardFromBin()
+        {
+            const string fileName = "SavedBoard.bin";
+            Board board = null;
+
+            if (File.Exists(fileName))
+            {
+                Stream testFileStream = File.OpenRead(fileName);
+                var deserializer = new BinaryFormatter();
+                board = (Board) deserializer.Deserialize(testFileStream);
+                testFileStream.Close();
+            }
+
+            return board;
         }
     }
 }

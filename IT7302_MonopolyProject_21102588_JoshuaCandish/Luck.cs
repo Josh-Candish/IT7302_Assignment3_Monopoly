@@ -1,7 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public class Luck : Property
     {
         private bool _isPenalty;

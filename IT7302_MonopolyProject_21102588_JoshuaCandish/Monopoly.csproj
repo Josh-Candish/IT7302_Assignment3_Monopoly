@@ -47,6 +47,7 @@
     <Compile Include="Die.cs" />
     <Compile Include="Factories\TransportFactory.cs" />
     <Compile Include="FileReader.cs" />
+    <Compile Include="FileWriter.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="InitialValueAccessor.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Tests\BoardTests.cs" />
     <Compile Include="Tests\DieTests.cs" />
     <Compile Include="Tests\FactoriesTests.cs" />
+    <Compile Include="Tests\FileWriterTests.cs" />
     <Compile Include="Tests\LuckTests.cs" />
     <Compile Include="Tests\MonopolyTests.cs" />
     <Compile Include="Tests\PlayerTests.cs" />

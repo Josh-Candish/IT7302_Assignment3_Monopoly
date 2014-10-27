@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public class Board
     {
         private static Board _board;
@@ -184,11 +185,16 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         }
 
         /// <summary>
-        /// VIOLATES SINGLETON PATTERN ***DO NOT USE, EXCEPT FOR TESTS***
+        /// ***DO NOT USE, EXCEPT FOR TESTS***
         /// </summary>
         public void ResetBoard()
         {
             _board = null;
+        }
+
+        public void SetBoardFromLoadedBoard(Board board)
+        {
+            _board = board;
         }
 
         #endregion

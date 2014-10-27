@@ -2,6 +2,7 @@
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public abstract class TradeableProperty : Property
     {
         protected decimal Price;
