@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public class Player : Trader
     {
         private int _location;

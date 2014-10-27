@@ -139,5 +139,21 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
+        [Test]
+        public void loading_board_from_saved_board()
+        {
+            Board.Access().ResetBoard();
+
+            CollectionAssert.IsEmpty(Board.Access().GetProperties());
+
+            _gameOfMonopoly.SetUpProperties();
+            Board.Access().AddPlayer(new Player());
+            _gameOfMonopoly.SaveGame();
+
+            _gameOfMonopoly.LoadGame();
+
+            Assert.AreEqual(40, Board.Access().GetProperties().Count);
+        }
     }
 }

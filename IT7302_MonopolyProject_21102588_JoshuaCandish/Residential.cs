@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public class Residential : TradeableProperty
     {
         private decimal HouseCost;

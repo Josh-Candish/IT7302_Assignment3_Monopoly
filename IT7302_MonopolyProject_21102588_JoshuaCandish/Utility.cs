@@ -1,5 +1,8 @@
-﻿namespace IT7302_MonopolyProject_21102588_JoshuaCandish
+﻿using System;
+
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public class Utility : TradeableProperty
     {
         private static int _rentMultiplier = 6;

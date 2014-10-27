@@ -178,8 +178,9 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Console.WriteLine("Please make a selection:\n");
             Console.WriteLine("1. Setup Monopoly Game");
             Console.WriteLine("2. Start New Game");
-            Console.WriteLine("3. Exit");
-            Console.Write("(1-3)>");
+            Console.WriteLine("3. Load Game");
+            Console.WriteLine("4. Exit");
+            Console.Write("(1-4)>");
             //read response
             resp = InputInteger();
             //if response is invalid redisplay menu
@@ -206,6 +207,14 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         }
                         break;
                     case 3:
+                        if (LoadGame())// Only play if a game has been loaded
+                        {
+                            PlayGame();
+                            break;
+                        }
+                        DisplayMainChoiceMenu();
+                        break;
+                    case 4:
                         Environment.Exit(0);
                         break;
                     default:
@@ -440,9 +449,10 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Console.WriteLine("4. Buy House for Property");
             Console.WriteLine("5. Trade Property with Player");
             Console.WriteLine("6. Mortgage Options");
-            if (player.IsInJail) Console.WriteLine("7. Get Out of Jail");
+            Console.WriteLine("7. Save Game");
+            if (player.IsInJail) Console.WriteLine("8. Get Out of Jail");
 
-            Console.Write(player.IsInJail ? "(1-7)>" : "(1-6)>");
+            Console.Write(player.IsInJail ? "(1-8)>" : "(1-7)>");
             //read response
             resp = InputInteger();
             //if response is invalid redisplay menu
@@ -477,6 +487,10 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         DisplayPlayerChoiceMenu(player);
                         break;
                     case 7:
+                        SaveGame();
+                        DisplayPlayerChoiceMenu(player);
+                        break;
+                    case 8:
                         GetOutOfJail(player, false);
                         DisplayPlayerChoiceMenu(player);
                         break;
@@ -821,6 +835,36 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                     MortgageOptions(player);
                     break;
             }
+        }
+
+        public void SaveGame()
+        {
+            var fileWriter = new FileWriter();
+
+            // Save the current state of the board
+            fileWriter.SaveGame(Board.Access());
+
+            Console.WriteLine("Game Saved!");
+        }
+
+        public bool LoadGame()
+        {
+            var fileReader = new FileReader();
+            var board = fileReader.ReadBoardFromBin();
+
+            // The board will be null if the file doesn't exist so we need to cover that case
+            // and we need to make sure the board has players otherwise it's an empty board
+            if (board != null && board.GetPlayerCount() > 0)
+            {
+                // Set the current board to be the the board instance loaded from the bin file
+                Board.Access().SetBoardFromLoadedBoard(board);
+
+                Console.WriteLine("Game Loaded!");
+                return true;
+            }
+
+            Console.WriteLine("No game to load!");
+            return false;
         }
 
         private void GetOutOfJail(Player player, bool mustSettle)

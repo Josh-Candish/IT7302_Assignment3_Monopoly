@@ -2,6 +2,7 @@
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public class Die
     {
         private static readonly Random NumGenerator = new Random();

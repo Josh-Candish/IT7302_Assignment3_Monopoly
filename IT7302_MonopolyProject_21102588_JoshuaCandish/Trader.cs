@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
+    [Serializable]
     public class Trader
     {
         protected ArrayList PropertiesOwned = new ArrayList();
