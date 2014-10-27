@@ -63,6 +63,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             return (Property)Properties[propertyIndex];
         }
 
+        public Property GetProperty(string propertyName)
+        {
+            return Properties.ToArray().Cast<Property>().FirstOrDefault(property => property.GetName() == propertyName);
+        }
+
         public ArrayList GetProperties()
         {
             return Properties;

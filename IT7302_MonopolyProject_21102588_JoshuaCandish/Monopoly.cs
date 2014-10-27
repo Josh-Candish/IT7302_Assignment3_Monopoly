@@ -850,14 +850,23 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public bool LoadGame()
         {
             var fileReader = new FileReader();
+
+            var banker = fileReader.ReadBankerFromBin();
+            // Set the banker to be the banker loaded from the bin file.
+            // We need to set the banker before loading the board because
+            // we set the banker to be the owner of properties from the board
+            // when loading the properties that the banker owned originally
+            Banker.SetBankerFromLoadedBanker(banker);
+
             var board = fileReader.ReadBoardFromBin();
 
             // The board will be null if the file doesn't exist so we need to cover that case
             // and we need to make sure the board has players otherwise it's an empty board
             if (board != null && board.GetPlayerCount() >= 2)
             {
-                // Set the current board to be the the board instance loaded from the bin file
+                // Set the board to be the the board instance loaded from the bin file
                 Board.Access().SetBoardFromLoadedBoard(board);
+
 
                 Console.WriteLine("Game Loaded!");
                 return true;

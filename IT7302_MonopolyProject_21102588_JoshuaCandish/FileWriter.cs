@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
@@ -15,6 +14,17 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Stream testFileStream = File.Create("SavedBoard.bin");
             var serializer = new BinaryFormatter();
             serializer.Serialize(testFileStream, board);
+            testFileStream.Close();
+
+            SaveBanker();
+        }
+
+        // Need to save the banker's current state as well
+        private static void SaveBanker()
+        {
+            Stream testFileStream = File.Create("SavedBanker.bin");
+            var serializer = new BinaryFormatter();
+            serializer.Serialize(testFileStream, Banker.Access());
             testFileStream.Close();
         }
     }

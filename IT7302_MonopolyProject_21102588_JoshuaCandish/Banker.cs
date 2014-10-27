@@ -17,5 +17,10 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         {
             return _banker ?? (_banker = new Banker());
         }
+
+        public static void SetBankerFromLoadedBanker(Banker banker)
+        {
+            _banker = banker;
+        }
     }
 }
