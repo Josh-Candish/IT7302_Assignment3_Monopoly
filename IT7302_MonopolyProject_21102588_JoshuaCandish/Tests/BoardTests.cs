@@ -17,6 +17,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
         [Test]
         public void adding_player()
         {
+            Board.Access().ResetBoard();
             Player p = new Player("Go");
             Board.Access().AddPlayer(p);
 
@@ -134,6 +135,16 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
 
             // So they'll be no cards left
             Assert.AreEqual(0, Board.Access().GetCommunityChestCards().Count);
+        }
+
+        [Test]
+        public void getting_property_by_name()
+        {
+            var property = new Property("Test");
+            Board.Access().AddProperty(property);
+
+            // Should not be null if it get us a property from this name
+            Assert.IsNotNull(Board.Access().GetProperty("Test"));
         }
     }
 }

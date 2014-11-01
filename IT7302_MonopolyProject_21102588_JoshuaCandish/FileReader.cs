@@ -98,9 +98,81 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 var deserializer = new BinaryFormatter();
                 board = (Board) deserializer.Deserialize(testFileStream);
                 testFileStream.Close();
+
+                /*
+                 * We need to set the properties on the board that 
+                 * were owned by the banker originally to be the banker 
+                 * again when reloading the properties
+                 */
+                foreach (var property in board.GetProperties())
+                {
+                    var prop = (Property) property;
+                    var banker = Banker.Access();
+
+                    if (prop.GetOwner().GetName() != "Leeroy Jenkins") continue;
+
+                    // If it's attached to leeroy who is the banker then
+                    // set that propety to be owned by the actual banker
+                    var banksProperty = board.GetProperty(prop.GetName());
+                    banksProperty.SetOwner(ref banker);
+                }
             }
 
             return board;
+        }
+
+        /// <summary>
+        /// Loads a saved instance of Banker from the SavedBankerbin file
+        /// </summary>
+        /// <returns>The banker instance</returns>
+        public Banker ReadBankerFromBin()
+        {
+            const string fileName = "SavedBanker.bin";
+            Banker banker = null;
+
+            if (File.Exists(fileName))
+            {
+                Stream testFileStream = File.OpenRead(fileName);
+                var deserializer = new BinaryFormatter();
+                banker = (Banker)deserializer.Deserialize(testFileStream);
+                testFileStream.Close();
+            }
+
+            return banker;
+        }
+
+        /// <summary>
+        /// Reads the two initial starting values for the banker and player's the from a csv file
+        /// </summary>
+        /// <returns>An array containing the 2 values, by default it contains 0</returns>
+        public decimal[] ReadInitialValuesFromCSV()
+        {
+            var values = new decimal[] {0, 0};
+
+            try
+            {
+                var reader = new StreamReader(File.OpenRead("initialvalues.csv"));
+
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+
+                    if (line.Contains("Banker")) continue; // Ignore the column headings
+
+                    var csvValues = line.Split(',');
+
+                    values[0] = Convert.ToDecimal(csvValues[0]);
+                    values[1] = Convert.ToDecimal(csvValues[1]);
+                }
+
+                return values;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something went wrong: {0}", ex.Message);
+            }
+
+            return values;
         }
     }
 }

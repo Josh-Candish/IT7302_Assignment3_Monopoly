@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
@@ -155,6 +156,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             _gameOfMonopoly.LoadGame();
 
             Assert.AreEqual(40, Board.Access().GetProperties().Count);
+
+            var bankerOwnedProperty = (Property) Board.Access().GetProperties().ToArray().First();
+
+            // Owner should be the banker for this property
+            Assert.AreEqual(Banker.Access(), bankerOwnedProperty.GetOwner());
 
             // Need to reset the the save file to a blank board
             // for when actually playing the game

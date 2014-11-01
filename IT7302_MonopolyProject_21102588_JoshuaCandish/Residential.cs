@@ -48,10 +48,18 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         {
             GetOwner().Pay(HouseCost);
             HouseCount++;
+            Board.Access().Houses--;
 
             if (HouseCount > 4)
             {
                 HasHotel = true;
+                // Take a hotel from the board
+                Board.Access().Hotels--;
+                // Give the houses back to the board now that
+                // this property has a hotel
+                Board.Access().Houses += HouseCount;
+                // This property should now have no houses
+                HouseCount = 0;
             }
         }
 
@@ -107,7 +115,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public override string ToString()
         {
-            return base.ToString() + string.Format("\t Houses: {0}", HouseCount);
+            return base.ToString() + string.Format("\t Houses: {0} Has Hotel: {1}", HouseCount, HasHotel ? "Yes" : "No");
         }
     }
 }

@@ -295,51 +295,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void SetUpProperties()
         {
-            var resFactory = new ResidentialFactory();
-            var transFactory = new TransportFactory();
-            var utilFactory = new UtilityFactory();
-            var genericFactory = new PropertyFactory();
-            var luckFactory = new LuckFactory();
-
-
-            try
-            {
-                var fileReader = new FileReader();
-                var propertyDetails = fileReader.ReadPropertyDetailsFromCSV();
-
-                // Add the properties to the board
-                foreach (var propertyDetail in propertyDetails)
-                {
-                    switch (propertyDetail.Type.ToLower())
-                    {
-                        case "luck":
-                            Board.Access()
-                                .AddProperty(luckFactory.create(propertyDetail.Name, propertyDetail.IsPenalty,
-                                    propertyDetail.Amount));
-                            break;
-                        case "residential":
-                            Board.Access()
-                                .AddProperty(resFactory.create(propertyDetail.Name, propertyDetail.Price,
-                                    propertyDetail.Rent, propertyDetail.HouseCost, propertyDetail.HouseColour));
-                            break;
-                        case "transport":
-                            Board.Access().AddProperty(transFactory.create(propertyDetail.Name));
-                            break;
-                        case "utility":
-                            Board.Access().AddProperty(utilFactory.create(propertyDetail.Name));
-                            break;
-                        case "generic":
-                            Board.Access().AddProperty(genericFactory.Create(propertyDetail.Name));
-                            break;
-                    }
-                }
-
-                Console.WriteLine("Properties have been setup");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Oops, something went wrong setting up the properties: {0}", ex.Message); 
-            }
+            var creator = new Creator();
+            creator.CreateProperties();
         }
 
         /// <summary>
@@ -386,28 +343,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void SetUpCards()
         {
-            try
-            {
-                var fileReader = new FileReader();
-                var cards = fileReader.ReadCardDetailsFromCSV();
-
-                foreach (var card in cards)
-                {
-                    if (card.GetName().Contains("Chance"))
-                    {
-                        Board.Access().AddChanceCard(card);
-                    }
-
-                    if (card.GetName().Contains("Community Chest"))
-                    {
-                        Board.Access().AddCommunityChestCard(card);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Oops, something went wrong setting up the cards: {0}", ex.Message);
-            }
+            var creator = new Creator();
+            creator.CreateCards();
         }
 
         public string PlayerPrompt(int playerIndex)
@@ -526,6 +463,12 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void BuyHouse(Player player)
         {
+            if (Board.Access().Houses < 1)
+            {
+                Console.WriteLine("Sorry, the bank doesn't have any houses left.");
+                return;
+            }
+
             if (player.IsInJail)
             {
                 Console.WriteLine("Sorry, you are in jail.");
@@ -586,6 +529,13 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
             else
             {
+                // Can't buy a fifth house if there are not hotels left
+                if (propertyToBuyFor.GetHouseCount() == 4 && Board.Access().Hotels < 1)
+                {
+                    Console.WriteLine("You can't buy another house as this would result in a hotel and there aren't any hotels left.");
+                    return;
+                }
+
                 //confirm
                 var doBuyHouse = GetInputYn(player,string.Format("You chose to buy a house for {0}. Are you sure you want to purchase a house for ${1}?",
                                     propertyToBuyFor.GetName(), propertyToBuyFor.GetHouseCost()));
@@ -850,14 +800,23 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         public bool LoadGame()
         {
             var fileReader = new FileReader();
+
+            var banker = fileReader.ReadBankerFromBin();
+            // Set the banker to be the banker loaded from the bin file.
+            // We need to set the banker before loading the board because
+            // we set the banker to be the owner of properties from the board
+            // when loading the properties that the banker owned originally
+            Banker.SetBankerFromLoadedBanker(banker);
+
             var board = fileReader.ReadBoardFromBin();
 
             // The board will be null if the file doesn't exist so we need to cover that case
             // and we need to make sure the board has players otherwise it's an empty board
             if (board != null && board.GetPlayerCount() >= 2)
             {
-                // Set the current board to be the the board instance loaded from the bin file
+                // Set the board to be the the board instance loaded from the bin file
                 Board.Access().SetBoardFromLoadedBoard(board);
+
 
                 Console.WriteLine("Game Loaded!");
                 return true;
@@ -931,4 +890,3 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         }
    }
 }
-

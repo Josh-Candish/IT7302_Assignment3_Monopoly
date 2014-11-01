@@ -1,15 +1,18 @@
-﻿namespace IT7302_MonopolyProject_21102588_JoshuaCandish
+﻿
+namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
     static class InitialValueAccessor
     {
+        private static readonly FileReader FileReader = new FileReader();
+
         public static decimal GetBankerStartingBanker()
         {
-            return 100000;
+            return FileReader.ReadInitialValuesFromCSV()[0];
         }
 
         public static decimal GetPlayerStartingBanker()
         {
-            return 1500;
+            return FileReader.ReadInitialValuesFromCSV()[1];
         }
     }
 }
