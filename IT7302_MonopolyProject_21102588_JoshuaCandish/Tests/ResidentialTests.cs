@@ -210,6 +210,36 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             Assert.AreEqual(bankerBalanceBeforeUnmortgage + paybackValue, Banker.Access().GetBalance());
         }
 
+        [Test]
+        public void adding_house_takes_away_from_board()
+        {
+            Board.Access().ResetBoard();
+
+            var expectedHouses = Board.Access().Houses - 1;
+
+            _residentialProperty.AddHouse();
+
+            var actualHouses = Board.Access().Houses;
+
+            Assert.AreEqual(expectedHouses, actualHouses);
+        }
+
+        [Test]
+        public void adding_hotel()
+        {
+            Board.Access().ResetBoard();
+            _residentialProperty = NewResidential();
+
+            for (var i = 0; i <= 4; i++)
+            {
+                _residentialProperty.AddHouse();
+            }
+
+            Assert.AreEqual(0, _residentialProperty.GetHouseCount());
+            Assert.AreEqual(32, Board.Access().Houses);
+            Assert.IsTrue(_residentialProperty.HasHotel);
+        }
+
         #region Helpers
 
         private Residential NewResidential()
