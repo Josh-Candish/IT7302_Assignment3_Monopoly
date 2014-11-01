@@ -639,9 +639,16 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public Property DisplayPropertyChooser(ArrayList properties, String sPrompt, bool forMortgages = false)
         {
+            var residentialProps = properties.ToArray().Where(property => property.GetType() == typeof(Residential)).ToArray();
+
+            //if for mortgages and no residential properties return null
+            if(forMortgages && !residentialProps.Any())
+                return null;
+
             //if no properties return null
             if (properties.Count == 0)
                 return null;
+
             Console.WriteLine(sPrompt);
 
             if (!forMortgages)
@@ -651,13 +658,9 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                     Console.WriteLine("{0}. {1}", i + 1, properties[i].ToString());
                 }
             }
-            else
+            else// We only want to show them residential properties if this is for mortgaging
             {
-                // We only want to show them residential properties if this is for mortgaging
-                // So get the residential props
-                var residentialProps = properties.ToArray().Where(property => property.GetType() == typeof (Residential)).ToArray();
-
-                // clear the propeties list and add only the residential properties to it
+                // clear the properties list and add only the residential properties to it
                 properties.Clear();
                 properties.AddRange(residentialProps);
 
@@ -666,10 +669,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                     Console.WriteLine("{0}. {1}", i + 1, properties[i].ToString());
                 }
             }
+
             //display prompt
             Console.Write("({0}-{1})>", 1, properties.Count);
             //get input
-            int resp = this.InputInteger();
+            var resp = this.InputInteger();
 
             //if outside of range
             if ((resp < 1) || (resp > properties.Count))
@@ -678,11 +682,9 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 this.DisplayPropertyChooser(properties, sPrompt, forMortgages);
                 return null;
             }
-            else
-            {
-                //return the appropriate property
-                return (Property) properties[resp - 1];
-            }
+
+            //return the appropriate property
+            return (Property) properties[resp - 1];
         }
 
         public Player DisplayPlayerChooser(ArrayList players, Player playerToExclude, String sPrompt)
