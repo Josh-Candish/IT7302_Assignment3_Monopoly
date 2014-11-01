@@ -140,5 +140,39 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
             return banker;
         }
+
+        /// <summary>
+        /// Reads the two initial starting values for the banker and player's the from a csv file
+        /// </summary>
+        /// <returns>An array containing the 2 values, by default it contains 0</returns>
+        public decimal[] ReadInitialValuesFromCSV()
+        {
+            var values = new decimal[] {0, 0};
+
+            try
+            {
+                var reader = new StreamReader(File.OpenRead("initialvalues.csv"));
+
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+
+                    if (line.Contains("Banker")) continue; // Ignore the column headings
+
+                    var csvValues = line.Split(',');
+
+                    values[0] = Convert.ToDecimal(csvValues[0]);
+                    values[1] = Convert.ToDecimal(csvValues[1]);
+                }
+
+                return values;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something went wrong: {0}", ex.Message);
+            }
+
+            return values;
+        }
     }
 }

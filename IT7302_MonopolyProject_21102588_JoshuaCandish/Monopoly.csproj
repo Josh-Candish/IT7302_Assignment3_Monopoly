@@ -59,6 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Property.cs" />
     <Compile Include="Factories\PropertyFactory.cs" />
+    <Compile Include="Creator.cs" />
     <Compile Include="PropertyDetails.cs" />
     <Compile Include="Residential.cs" />
     <Compile Include="Factories\ResidentialFactory.cs" />

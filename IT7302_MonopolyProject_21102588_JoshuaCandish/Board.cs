@@ -16,6 +16,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         private int CardAmount = 16;
         private int Squares = 40;
         private bool _gameOver;
+        public int Houses = 32;
+        public int Hotels = 12;
 
         // Singleton method to access
         public static Board Access()
