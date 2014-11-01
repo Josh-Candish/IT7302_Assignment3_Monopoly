@@ -461,7 +461,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
         }
 
-        public void BuyHouse(Player player)
+        public void BuyHouse(Player player, Property testProperty = null, bool? testAnswer = null)
         {
             if (Board.Access().Houses < 1)
             {
@@ -476,9 +476,11 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
 
             //create prompt
-            string sPrompt = String.Format("{0}Please select a property to buy a house for:", this.PlayerPrompt(player));
+            var sPrompt = String.Format("{0}Please select a property to buy a house for:", PlayerPrompt(player));
+
             //create variable for propertyToBuy
             Residential propertyToBuyFor = null;
+
             if (player.GetPropertiesOwnedFromBoard().Count == 0)
             {
                 //write message
@@ -487,7 +489,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 return;
             }
             //get the property to buy house for
-            Property property = this.DisplayPropertyChooser(player.GetPropertiesOwnedFromBoard(), sPrompt);
+            var property = testProperty ?? DisplayPropertyChooser(player.GetPropertiesOwnedFromBoard(), sPrompt);
             //if dont own any properties
             
             //check that it is a residential
@@ -537,8 +539,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                 }
 
                 //confirm
-                var doBuyHouse = GetInputYn(player,string.Format("You chose to buy a house for {0}. Are you sure you want to purchase a house for ${1}?",
-                                    propertyToBuyFor.GetName(), propertyToBuyFor.GetHouseCost()));
+                var doBuyHouse = testAnswer ?? GetInputYn(player, string.Format("You chose to buy a house for {0}. Are you sure you want to purchase a house for ${1}?", 
+                                                                                propertyToBuyFor.GetName(), propertyToBuyFor.GetHouseCost()));
 
                 //if confirmed
                 if (doBuyHouse)

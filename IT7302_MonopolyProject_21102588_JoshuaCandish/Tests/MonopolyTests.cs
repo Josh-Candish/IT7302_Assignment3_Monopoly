@@ -117,6 +117,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
         [Test]
         public void board_has_32_chance_community_cards()
         {
+            SetUp();
             const int expected = 32;
             var actual = Board.Access().GetChanceCards().Count + Board.Access().GetCommunityChestCards().Count;
 
@@ -126,6 +127,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
         [Test]
         public void board_has_16_community_cards()
         {
+            SetUp();
             const int expected = 16;
             var actual = Board.Access().GetCommunityChestCards().Count;
 
@@ -135,6 +137,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
         [Test]
         public void board_has_16_chance_cards()
         {
+            SetUp();
             const int expected = 16;
             var actual = Board.Access().GetChanceCards().Count;
 
@@ -167,5 +170,165 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
             Board.Access().ResetBoard();
             _gameOfMonopoly.SaveGame();
         }
+
+        [Test]
+        public void make_play_when_player_is_criminal()
+        {
+            SetUp();
+
+            _player1.RolledDoublesCount = 3;
+            _gameOfMonopoly.MakePlay(0);
+
+            Assert.IsTrue(_player1.IsInJail);
+        }
+
+        #region Buying House
+
+        [Test]
+        public void no_houses_left()
+        {
+            var property = new Residential();
+            Board.Access().Houses = 0;
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(0, property.GetHouseCount());
+
+            Board.Access().ResetBoard();
+        }
+
+        [Test]
+        public void player_in_jail()
+        {
+            var property = new Residential();
+            _player1.IsInJail = true;
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(0, property.GetHouseCount());
+        }
+
+        [Test]
+        public void player_doesnt_own_properties()
+        {
+            Board.Access().ResetBoard();
+            var property = new Residential();
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(0, property.GetHouseCount());
+        }
+
+        [Test]
+        public void property_isnt_residential()
+        {
+            var property = new Transport();
+            property.SetOwner(ref _player1);
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+        }
+
+        [Test]
+        public void property_is_mortgaged()
+        {
+            var property = new Residential();
+            property.SetOwner(ref _player1);
+            property.MortgageProperty();
+
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(0, property.GetHouseCount());
+        }
+
+        [Test]
+        public void player_doesnt_own_all_properties_of_colour()
+        {
+            var property = new Residential("Test");
+            var property2 = new Residential("Test2");
+
+            property.SetOwner(ref _player1);
+
+            Board.Access().AddProperty(property);
+            Board.Access().AddProperty(property2);
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(0, property.GetHouseCount());
+        }
+
+        [Test]
+        public void property_cant_be_developed_further()
+        {
+            Board.Access().ResetBoard();
+
+            var property = new Residential("Test");
+            var property2 = new Residential("Test2");
+            property.SetOwner(ref _player1);
+            property2.SetOwner(ref _player1);
+            Board.Access().AddProperty(property);
+            Board.Access().AddProperty(property2);
+
+            property.AddHouse();
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(1, property.GetHouseCount());
+        }
+
+        [Test]
+        public void property_has_hotel()
+        {
+            Board.Access().ResetBoard();
+
+            var property = new Residential("Test");
+            property.SetOwner(ref _player1);
+            property.HasHotel = true;
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(0, property.GetHouseCount());
+        }
+
+        [Test]
+        public void no_hotels_left()
+        {
+            Board.Access().ResetBoard();
+            Board.Access().Hotels = 0;
+
+            var property = new Residential("Test");
+            property.SetOwner(ref _player1);
+
+            for (var i = 0; i <= 3; i++)
+            {
+                property.AddHouse();
+            }
+
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(4, property.GetHouseCount());
+            Assert.IsFalse(property.HasHotel);
+        }
+
+        [Test]
+        public void adding_house()
+        {
+            Board.Access().ResetBoard();
+
+            var property = new Residential("Test");
+            property.SetOwner(ref _player1);
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.BuyHouse(_player1, property, true);
+
+            Assert.AreEqual(1, property.GetHouseCount());
+        }
+
+        #endregion
     }
 }
