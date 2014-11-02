@@ -5,6 +5,8 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
     public class Creator
     {
+        private readonly FileReader _fileReader = new FileReader();
+
         public void CreateProperties()
         {
             var resFactory = new ResidentialFactory();
@@ -16,8 +18,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
             try
             {
-                var fileReader = new FileReader();
-                var propertyDetails = fileReader.ReadPropertyDetailsFromCSV();
+                var propertyDetails = _fileReader.ReadPropertyDetailsFromCSV();
 
                 // Add the properties to the board
                 foreach (var propertyDetail in propertyDetails)
@@ -58,8 +59,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
         {
             try
             {
-                var fileReader = new FileReader();
-                var cards = fileReader.ReadCardDetailsFromCSV();
+                var cards = _fileReader.ReadCardDetailsFromCSV();
 
                 foreach (var card in cards)
                 {
