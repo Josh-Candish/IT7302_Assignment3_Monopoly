@@ -13,6 +13,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
     {
         private readonly ConsoleColor[] _colors = new ConsoleColor[8] { ConsoleColor.Cyan, ConsoleColor.Green, ConsoleColor.Yellow, ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Gray, ConsoleColor.Blue, ConsoleColor.DarkYellow};
         private bool _gameSetUp;
+        private Creator _creator = new Creator();
 
         public override void InitialiseGame()
         {
@@ -294,8 +295,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void SetUpProperties()
         {
-            var creator = new Creator();
-            creator.CreateProperties();
+            _creator.CreateProperties();
         }
 
         /// <summary>
@@ -342,8 +342,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 
         public void SetUpCards()
         {
-            var creator = new Creator();
-            creator.CreateCards();
+            _creator.CreateCards();
         }
 
         public string PlayerPrompt(int playerIndex)

@@ -1,42 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Factories.LuckFactory">
-    <Position X="8" Y="2" Width="1.5" />
+    <Position X="18.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Factories\LuckFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Factories.PropertyFactory">
-    <Position X="10.5" Y="0.5" Width="1.5" />
+    <Position X="21" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
       <FileName>Factories\PropertyFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Factories.ResidentialFactory">
-    <Position X="13.25" Y="2" Width="1.5" />
+    <Position X="23.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Factories\ResidentialFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Factories.TransportFactory">
-    <Position X="9.75" Y="2" Width="1.5" />
+    <Position X="20.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Factories\TransportFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Factories.UtilityFactory">
-    <Position X="11.5" Y="2" Width="1.5" />
+    <Position X="22" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Factories\UtilityFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Banker">
-    <Position X="8.25" Y="8.5" Width="1.5" />
+    <Position X="8" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAQAEAAAA=</HashCode>
       <FileName>Banker.cs</FileName>
@@ -64,14 +64,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.FileReader">
-    <Position X="5.25" Y="11" Width="1.5" />
+    <Position X="20.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAgAAAAAQAEAAA=</HashCode>
       <FileName>FileReader.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.FileWriter">
-    <Position X="5.25" Y="13.25" Width="1.5" />
+    <Position X="20.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>FileWriter.cs</FileName>
@@ -86,7 +86,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.InitialValueAccessor">
-    <Position X="3.5" Y="11" Width="1.5" />
+    <Position X="18.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAACAACAABAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>InitialValueAccessor.cs</FileName>
@@ -102,19 +102,19 @@
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Monopoly">
     <Position X="15.5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAABAAAGAAUCAABAEIACABBQAhAZABAUAIEQIAAAAk=</HashCode>
+      <HashCode>AgAABAAAGAAUCAABAEIACABFQAhAZABAUAIEQIAAAAk=</HashCode>
       <FileName>Monopoly.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Player">
-    <Position X="11.5" Y="8.25" Width="1.5" />
+    <Position X="11.25" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ICAAAACCAYICAAAEELBAAMAAAGCBADAgACAAQCEiAIA=</HashCode>
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Program">
-    <Position X="3.5" Y="13.25" Width="1.5" />
+    <Position X="18.75" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
@@ -128,7 +128,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.PropertyDetails">
-    <Position X="7" Y="11" Width="1.5" />
+    <Position X="22.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQAAAAAAAAAAAA6AACIAAAAAAQAAAAAAAAA=</HashCode>
       <FileName>PropertyDetails.cs</FileName>
@@ -137,7 +137,7 @@
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Residential">
     <Position X="0.5" Y="8.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAgIAAAAAAQIAAECAAAAAgAAAIAAAACAABAIIQAAAA=</HashCode>
+      <HashCode>QAAgIAAAAAAQIAAECAAAAAgEAAIAAAACAABAIIQAAAA=</HashCode>
       <FileName>Residential.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -149,7 +149,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="IT7302_MonopolyProject_21102588_JoshuaCandish.Trader">
-    <Position X="9.5" Y="3.75" Width="1.5" />
+    <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACAABCCAAIAAAgAEAAgAAAQAAIAAAAIQAAAAQAAABAA=</HashCode>
       <FileName>Trader.cs</FileName>
