@@ -330,5 +330,71 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish.Tests
         }
 
         #endregion
+
+        #region Selling House
+
+        [Test]
+        public void player_doesnt_own_any_properties()
+        {
+            Board.Access().ResetBoard();
+
+            _gameOfMonopoly.SellHouse(_player1);
+
+            Assert.Pass();
+        }
+
+        [Test]
+        public void player_doesnt_own_residential_properties()
+        {
+            Board.Access().ResetBoard();
+            var property = new Transport("Test");
+            property.SetOwner(ref _player1);
+
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.SellHouse(_player1);
+
+            Assert.Pass();
+        }
+
+        [Test]
+        public void player_doesnt_own_property_with_house()
+        {
+            Board.Access().ResetBoard();
+            var property = new Residential("Test");
+            property.SetOwner(ref _player1);
+
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.SellHouse(_player1);
+
+            Assert.Pass();
+        }
+
+        [Test]
+        public void selling_house()
+        {
+            Board.Access().ResetBoard();
+
+            var property = new Residential("Test");
+            property.SetOwner(ref _player1);
+            property.AddHouse();
+
+            var playersBalanceBefore = _player1.GetBalance();
+            var expectedIncreaseAmount = property.GetHouseCost()/2;
+            
+            Board.Access().AddProperty(property);
+
+            _gameOfMonopoly.SellHouse(_player1, property);
+
+            // Players balance should go up by half house cost
+            Assert.AreEqual(playersBalanceBefore + expectedIncreaseAmount, _player1.GetBalance());
+            // Property shouldn't have house anymore
+            Assert.AreEqual(0, property.GetHouseCount());
+            // Board's houses should be back to full
+            Assert.AreEqual(32, Board.Access().Houses);
+        }
+
+        #endregion
     }
 }

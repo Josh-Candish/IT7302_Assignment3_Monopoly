@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using IT7302_MonopolyProject_21102588_JoshuaCandish.Factories;
 
 namespace IT7302_MonopolyProject_21102588_JoshuaCandish
 {
@@ -384,12 +383,13 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             Console.WriteLine("2. View your details");
             Console.WriteLine("3. Purchase This Property");
             Console.WriteLine("4. Buy House for Property");
-            Console.WriteLine("5. Trade Property with Player");
-            Console.WriteLine("6. Mortgage Options");
-            Console.WriteLine("7. Save Game");
-            if (player.IsInJail) Console.WriteLine("8. Get Out of Jail");
+            Console.WriteLine("5. Sell house");
+            Console.WriteLine("6. Trade Property with Player");
+            Console.WriteLine("7. Mortgage Options");
+            Console.WriteLine("8. Save Game");
+            if (player.IsInJail) Console.WriteLine("9. Get Out of Jail");
 
-            Console.Write(player.IsInJail ? "(1-8)>" : "(1-7)>");
+            Console.Write(player.IsInJail ? "(1-9)>" : "(1-8)>");
             //read response
             resp = InputInteger();
             //if response is invalid redisplay menu
@@ -416,18 +416,22 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         DisplayPlayerChoiceMenu(player);
                         break;
                     case 5:
-                        TradeProperty(player);
+                        SellHouse(player);
                         DisplayPlayerChoiceMenu(player);
                         break;
                     case 6:
-                        MortgageOptions(player);
+                        TradeProperty(player);
                         DisplayPlayerChoiceMenu(player);
                         break;
                     case 7:
-                        SaveGame();
+                        MortgageOptions(player);
                         DisplayPlayerChoiceMenu(player);
                         break;
                     case 8:
+                        SaveGame();
+                        DisplayPlayerChoiceMenu(player);
+                        break;
+                    case 9:
                         GetOutOfJail(player, false);
                         DisplayPlayerChoiceMenu(player);
                         break;
@@ -551,6 +555,46 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
                         propertyToBuyFor.GetName());
                 }
             }
+        }
+
+        public void SellHouse(Player player, Property testProperty = null)
+        {
+            var playersProperties = player.GetPropertiesOwnedFromBoard();
+
+            if (playersProperties.Count == 0)
+            {
+                Console.WriteLine("{0}You do not own any properties.", PlayerPrompt(player));
+                return;
+            }
+
+            // Get properties that are residential and have at least one house to be sold
+            var developedResidentials =
+                playersProperties.ToArray()
+                    .Where(x => x.GetType() == typeof (Residential))
+                    .Cast<Residential>()
+                    .Where(x => x.GetHouseCount() >= 1)
+                    .ToArray();
+
+            if (!developedResidentials.Any())
+            {
+                Console.WriteLine("You don't have any properties with houses to be sold!");
+                return;
+            }
+
+            // Add the correct propeties to an arraylist, this is because
+            // the property chooser takes an arraylist not an IEnumarable
+            var propertiesToChooseFrom = new ArrayList();
+            propertiesToChooseFrom.AddRange(developedResidentials);
+
+            var playerPrompt = String.Format("{0}Please select a property to sell the house for:", PlayerPrompt(player));
+
+            // Get the property to buy house for
+            var property = testProperty ?? DisplayPropertyChooser(propertiesToChooseFrom, playerPrompt);
+
+            var propertyToSellHouse = (Residential) property;
+
+            propertyToSellHouse.SellHouse();
+            Console.WriteLine("House sold for ${0}", propertyToSellHouse.GetHouseCost()/2);
         }
 
         public void TradeProperty(Player player)
