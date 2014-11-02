@@ -63,6 +63,19 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             }
         }
 
+        public void SellHouse()
+        {
+            // Owner receives half the house cost from banker
+            var halfHouseCost = HouseCost/2;
+            Owner.Receive(halfHouseCost);
+            Banker.Access().Pay(halfHouseCost);
+
+            // Board gets house back
+            Board.Access().Houses++;
+            // Property loses the house
+            HouseCount--;
+        }
+
         public bool MortgageProperty()
         {
             // Property must be undeveloped and can't
