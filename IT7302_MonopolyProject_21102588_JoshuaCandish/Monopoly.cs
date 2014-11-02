@@ -724,8 +724,7 @@ namespace IT7302_MonopolyProject_21102588_JoshuaCandish
             if ((resp < 1) || (resp > properties.Count))
             {
                 Console.WriteLine("That option is not avaliable. Please try again.");
-                this.DisplayPropertyChooser(properties, sPrompt, forMortgages);
-                return null;
+                return DisplayPropertyChooser(properties, sPrompt, forMortgages);
             }
 
             //return the appropriate property
